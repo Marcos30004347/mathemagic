@@ -1,0 +1,8 @@
+{
+		"lexer": {
+				"invalid_point_count": {
+					"pt-BR": "Mais de um ponto '.' em valor numérico!",
+					"en-US": "More than one point '.' on a numeric value!"
+				}
+		}
+}

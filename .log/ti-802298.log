@@ -1,0 +1,26 @@
+[14:21:40.665] Global cache location '/home/marcos/.cache/typescript/4.6', safe file path '/home/marcos/.nvm/versions/node/v17.7.1/lib/node_modules/typescript/lib/typingSafeList.json', types map path /home/marcos/.nvm/versions/node/v17.7.1/lib/node_modules/typescript/lib/typesMap.json
+[14:21:40.666] Processing cache location '/home/marcos/.cache/typescript/4.6'
+[14:21:40.666] Trying to find '/home/marcos/.cache/typescript/4.6/package.json'...
+[14:21:40.667] Loaded content of '/home/marcos/.cache/typescript/4.6/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.585"},"devDependencies":{"@types/node":"^17.0.21","@types/react":"^17.0.43","@types/react-dom":"^17.0.14","@types/testing-library__jest-dom":"^5.14.3"}}
+[14:21:40.667] Loaded content of '/home/marcos/.cache/typescript/4.6/package-lock.json'
+[14:21:40.682] Adding entry into typings cache: 'node' => '/home/marcos/.cache/typescript/4.6/node_modules/@types/node/index.d.ts'
+[14:21:40.686] Adding entry into typings cache: 'react' => '/home/marcos/.cache/typescript/4.6/node_modules/@types/react/index.d.ts'
+[14:21:40.688] Adding entry into typings cache: 'react-dom' => '/home/marcos/.cache/typescript/4.6/node_modules/@types/react-dom/index.d.ts'
+[14:21:40.689] Adding entry into typings cache: 'testing-library__jest-dom' => '/home/marcos/.cache/typescript/4.6/node_modules/@types/testing-library__jest-dom/index.d.ts'
+[14:21:40.689] Finished processing cache location '/home/marcos/.cache/typescript/4.6'
+[14:21:40.690] Process id: 802312
+[14:21:40.690] NPM location: /home/marcos/.nvm/versions/node/v17.7.1/bin/npm (explicit '--npmLocation' not  provided)
+[14:21:40.690] validateDefaultNpmLocation: false
+[14:21:40.690] Npm config file: /home/marcos/.cache/typescript/4.6/package.json
+[14:21:40.690] Updating types-registry npm package...
+[14:21:40.690] Exec: /home/marcos/.nvm/versions/node/v17.7.1/bin/npm install --ignore-scripts types-registry@latest
+[14:21:41.554]     Succeeded. stdout:
+    
+    up to date, audited 24 packages in 744ms
+
+3 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+[14:21:41.555] Updated types-registry npm package

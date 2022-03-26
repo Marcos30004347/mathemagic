@@ -1,0 +1,23 @@
+.magic-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+body {
+		background-color: white;
+}
+
+textarea {
+		height:20px;
+		width:500px;
+		overflow:hidden;
+		resize: none;
+}
+
+.graphic {
+		color: black;
+}

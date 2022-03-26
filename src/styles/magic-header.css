@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/public/fonts/Fredoka.ttf') format("truetype-variations");
+  font-weight: 1 999;
+}
+
+@font-face {
+  font-family: 'BebaNeue';
+  src: url('/public/fonts/BebasNeue-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'TitanOne';
+  src: url('/public/fonts/TitanOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'LuckiestGuy';
+  src: url('/public/fonts/LuckiestGuy-Regular.ttf');
+}
+
+.magic-logo {
+	font-size: 2em;
+	margin: 4px;
+  text-align: center;
+}
+
+.magic-logo-text0 {
+  font-family: 'LuckiestGuy';
+	color: #fc0388;
+	/*
+	background-image: linear-gradient(to right, #4CB8C4, #3CD3AD);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	*/
+}
+
+.magic-logo-text1 {
+		font-family: 'LuckiestGuy';
+		color: #fc0388;
+}
+
+.magic-logo-beta {
+  font-family: 'TitanOne';
+	font-size: .3em;
+	color: red;
+  border: none;	
+  border-bottom: 1px solid red;
+	background-size: 200%;
+	background-position: right;
+}
+
+.magic-header {
+		margin-bottom: 2em;
+}
