@@ -1,33 +1,27 @@
 @font-face {
-  font-family: 'Fredoka';
-  src: url('/public/fonts/Fredoka.ttf') format("truetype-variations");
+  font-family: 'Nunito';
+  src: url('/public/fonts/Nunito-VariableFont_wght.ttf') format("truetype-variations");
   font-weight: 1 999;
 }
 
-@font-face {
-  font-family: 'BebaNeue';
-  src: url('/public/fonts/BebasNeue-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'TitanOne';
-  src: url('/public/fonts/TitanOne-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'LuckiestGuy';
-  src: url('/public/fonts/LuckiestGuy-Regular.ttf');
+.menu {
+		display: flex;
 }
 
 .magic-logo {
-	font-size: 2em;
-	margin: 4px;
-  text-align: center;
+	align-items: center;
+	/* background-color:black; */
+	/* color: white; */
+	padding: 1em;
+	display: flex;
+	justify-content: center;
+	font-size: 1.5em;
 }
 
-.magic-logo-text0 {
-  font-family: 'LuckiestGuy';
-	color: #fc0388;
+.magic-logo-text {
+	font-family: 'Nunito';
+	font-weight: 700;
+
 	/*
 	background-image: linear-gradient(to right, #4CB8C4, #3CD3AD);
 	-webkit-background-clip: text;
@@ -36,20 +30,25 @@
 }
 
 .magic-logo-text1 {
-		font-family: 'LuckiestGuy';
-		color: #fc0388;
-}
-
-.magic-logo-beta {
-  font-family: 'TitanOne';
-	font-size: .3em;
-	color: red;
-  border: none;	
-  border-bottom: 1px solid red;
-	background-size: 200%;
-	background-position: right;
+  font-family: 'Times New Roman', serif;
+	color: black;
 }
 
 .magic-header {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		margin-bottom: 2em;
+}
+
+.header-menu {
+	font-family: 'Nunito';
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.menu-item {
+		margin-left: 3em;
 }

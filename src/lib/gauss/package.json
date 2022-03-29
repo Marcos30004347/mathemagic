@@ -1,0 +1,15 @@
+{
+  "name": "gauss-js",
+  "version": "PACKAGE_VERSION",
+  "description": "Gauss is a Symbolic Math Library ported to javscripte using WASM",
+  "main": "gauss.js",
+  "author": "Marcos Vinicius Moreira Santos",
+  "license": "ISC",
+	"script": {
+		"generate-docs": "node_modules/.bin/jsdoc --configure jsdoc.json --verbose"
+	},
+  "dependencies": {
+    "clean-jsdoc-theme": "^3.3.4",
+    "jsdoc": "^3.6.10"
+  }
+}

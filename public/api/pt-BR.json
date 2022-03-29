@@ -1,0 +1,15 @@
+{
+		"key": "API",
+		"kind": "word",
+		"next": [{
+				"key": "simplificar",
+				"kind": "word",
+				"next": [{
+						"key": 0,
+						"kind": "arg",
+						"size": 1,
+						"type": "expr",
+						"exec": "reduction"
+				}]
+		}]
+}

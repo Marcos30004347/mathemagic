@@ -1,0 +1,33 @@
+{
+		"key": "API",
+		"kind": "word",
+		"next": [{
+				"key": "reduce",
+				"kind": "word",
+				"next": [{
+						"key": 0,
+						"kind": "arg",
+						"size": 1,
+						"type": "expr",
+						"exec": "reduction"
+				}]
+		},{
+				"key": "reduced",
+				"kind": "word",
+ 				"next": [{
+						"key": "form",
+						"kind": "word",
+						"next": [{
+								"key": "of",
+								"kind": "word",
+								"next": [{
+										"key": 0,
+										"kind": "arg",
+										"size": 1,
+										"type": "expr",
+										"exec": "reduction"
+								}]
+						}]
+				}]
+		}]
+}
