@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { MagicInterpreter } from '../lib/interpreter'
 
 import '../styles/magic-code-input.css'
+
 
 const CodeInput = (args: {
 	idiom: string,
@@ -11,25 +12,28 @@ const CodeInput = (args: {
 }) => {
 	const [comment, setComment] = useState('');
 
+	const parser = useRef(new MagicInterpreter());
+
+	useEffect(() => {
+		parser.current.init(args.idiom);
+
+		return () => {
+			parser.current.stop();
+		}
+	}, [args.idiom])
+
 	const handleTextArea = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setComment(e.target.value);
 	};
 
-	const parser = new MagicInterpreter(args.idiom);
-
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
 		e.preventDefault();
 
-		await parser.init();
-
-		const element = await parser.compileElement(comment, args.childs.length);
+		const element = await parser.current.compileElement(comment, args.childs.length);
 
 		const childs = [element].concat(args.childs);
 
 		args.setChilds(childs);
-
-		parser.stop();
 	}
 
 	return (

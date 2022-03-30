@@ -12,49 +12,57 @@ import katex from 'katex'
 import parse from 'html-react-parser'
 
 import '../styles/magic-code-input.css'
+import { APIKind, APINode, APIParser } from './api/parser'
 
-type Execute = "reduce"
 
-type MagicAPIDescWord = {
-	key: string
-	kind: "word"
-	args: number
-	exec?: Execute
-	next?: MagicAPIDescNode[]
-}
+// type MagicAPIDescWord = {
+// 	key: string
+// 	kind: "word"
+// 	args: number
+// 	exec?: Execute
+// 	next?: MagicAPIDescNode[]
+// }
 
-type MagicAPIDescArg = {
-	kind: "arg"
-	key: number
-	type: "expr" | "number" | "string"
-	size: number
-	exec?: Execute
-	next?: MagicAPIDescNode[],
-};
+// type MagicAPIDescArg = {
+// 	kind: "arg"
+// 	key: number
+// 	type: "expr" | "number" | "string"
+// 	size: number
+// 	exec?: Execute
+// 	next?: MagicAPIDescNode[],
+// };
 
-type MagicAPIDescNode = MagicAPIDescWord | MagicAPIDescArg;
+// type MagicAPIDescNode = MagicAPIDescWord | MagicAPIDescArg;
 
 // type MagicAPIDesc = {
 // 	api: MagicAPIDescNode[]
 // };
 
+type APIQueryDesc = {
+	func: string,
+	exec: string,
+};
+
+type APIDesc = {
+	querys: APIQueryDesc[]
+}
+
 type MagicAPIWord = {
-	key: string
 	kind: "word"
-	exec?: Execute
-	next?: { [key: string]: MagicAPINode },
+	exec?: string
+	next: { [key: string]: MagicAPINode },
 };
 
 type MagicAPIArgument = {
 	key: number
-	kind: "arg"
-	type: "expr" | "number" | "string"
-	size: number
-	exec?: Execute
-	next?: { [key: string]: MagicAPINode },
+	kind: "input"
+	type: string
+	exec?: string
+	next: { [key: string]: MagicAPINode },
 };
 
 type MagicAPINode = MagicAPIArgument | MagicAPIWord
+
 
 type CallArguments = {
 	kind: MagicAPINode
@@ -75,14 +83,16 @@ export class MagicInterpreter {
 	api: MagicAPINode;
 	scope: gauss.Scope | null;
 
-	constructor(culture: string) {
-		this.culture = culture;
-		this.api = { key: "API", kind: 'word', next: {} };
+	constructor() {
+		this.culture = "en-US";
+		this.api = { kind: 'word', next: {} };
 		this.scope = null;
 	}
 
 
-	private async fetchAPI() {
+	private async fetchAPI(culture: string) {
+		this.culture = culture;
+
 		const req = await fetch('./api/' + this.culture + ".json", {
 			headers: {
 				'Content-Type': 'application/json',
@@ -92,13 +102,13 @@ export class MagicInterpreter {
 
 		const api = await req.json();
 
-		const dsc: MagicAPIDescNode = api;
-
-		this.registerAPIDesc(dsc);
+		const dsc : APIDesc = api;
+		console.log(dsc);
+		this.registerAPI(dsc);
 	}
 
-	public async init() {
-		await this.fetchAPI();
+	public async init(culture: string) {
+		await this.fetchAPI(culture);
 		await gauss.init();
 
 		this.scope = gauss.scopeCreate();
@@ -112,59 +122,82 @@ export class MagicInterpreter {
 		gauss.scopeDestroy(this.scope)
 	}
 
-	private registerAPIDescNext(desc: MagicAPIDescNode, api: MagicAPINode) {
-		if (!desc.next) {
-			return;
-		}
+	private registerAPI(dsc: APIDesc) {
+		for(const func of dsc.querys) {
+			const parser = new APIParser(func.func);
 
-		if (!api.next) {
-			api.next = {};
-		}
+			let node : APINode | undefined = parser.parse();
 
-		for (const n of desc.next) {
-			let key = undefined;
+			console.log(node);
 
-			if (n.kind === "word") {
-				key = n.key;
+			let api = this.api;
 
-				api.next[n.key] = {
-					key: n.key,
-					kind: "word",
-					exec: n.exec,
-					next: {},
-				};
+			while(node) {
+				if(!node.left) {
+					throw new Error('Expecting left argument');
+				}
+
+				const curr = node.left;
+
+				console.log(curr);
+
+				if(curr.kind === APIKind.API_STRING_LITERAL) {
+					if(!curr.token) {
+						throw new Error('api string does not have a token');
+					}
+
+					api.next[curr.token.value] = {
+						kind: "word",
+						next: {},
+					};
+
+					api = api.next[curr.token.value];
+				}
+
+				if(curr.kind === APIKind.API_ARG) {
+					if(!curr.left) {
+						throw new Error('APINode left operand is undefined');
+					}
+
+					if(!curr.right) {
+						throw new Error('APINode left operand is undefined');
+					}
+
+					const key = curr.left;
+
+					if(key.kind != APIKind.API_NUMBER_LITERAL) {
+						throw new Error('argument key should be a number');
+					}
+
+					if(!key.token) {
+						throw new Error('argument key token is undefined');
+					}
+
+					const typ = curr.right;
+
+					if(!typ.token) {
+						throw new Error('argument type token is undefined');
+					}
+
+					api.next['input'] = {
+						key: Number(key.token.value),
+						kind: "input",
+						type: typ.token.value,
+						next: {}
+					};
+
+					api = api.next['input'];
+				}
+
+				node = node.right;
 			}
 
-			if (n.kind === "arg") {
-				key = "arg";
-
-				api.next["arg"] = {
-					kind: "arg",
-					key: n.key,
-					size: n.size,
-					type: n.type,
-					exec: n.exec,
-					next: {},
-				};
-			}
-
-			if (!key) {
-				throw new Error('key is undefined');
-			}
-
-			const val = api.next[key];
-
-			this.registerAPIDescNext(n, val);
-		}
-	}
-
-
-	private registerAPIDesc(api: MagicAPIDescNode) {
-		if (!this.api.next) {
-			this.api.next = {};
+			api.exec = func.exec;
 		}
 
-		this.registerAPIDescNext(api, this.api);
+
+		console.log("this.api")
+		console.log(this.api)
 	}
 
 	private parse(src: string): ASTNode {
@@ -177,7 +210,6 @@ export class MagicInterpreter {
 		if (this.scope === null) {
 			return InterpreterError('scope not initialized');
 		}
-
 		if (tree.kind == ASTKind.AST_NUMBER) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
@@ -241,7 +273,6 @@ export class MagicInterpreter {
 			if (tree.right == null) {
 				return InterpreterError('right operand is not defined');
 			}
-			console.log("aaaa");
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			return gauss.pow(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
@@ -302,12 +333,12 @@ export class MagicInterpreter {
 				throw new Error('api.next is not defined');
 			}
 
-			if (api.next["arg"]) {
-				if (!api.next['arg']) {
-					throw new Error('arg key is undefined');
+			if (api.next["input"]) {
+				if (!api.next['input']) {
+					throw new Error('input key is undefined');
 				}
 
-				const kind = api.next['arg'];
+				const kind = api.next['input'];
 
 				data = data.concat([{
 					kind: kind,
@@ -322,9 +353,9 @@ export class MagicInterpreter {
 			}
 
 			const name = call.left.token.value;
-
+			console.log(api);
 			if (!api.next[name]) {
-				throw new Error('api is not defined');
+				throw new Error('api is not defined ????');
 			}
 
 			api = api.next[name];
@@ -336,21 +367,21 @@ export class MagicInterpreter {
 			throw new Error('api.next is undefined');
 		}
 
-		if (!api.next['arg']) {
+		if (!api.next['input']) {
 			throw new Error('expecting argument');
 		}
 
 
-		if (!api.next['arg'].exec) {
+		if (!api.next['input'].exec) {
 			throw new Error('exec undefined');
 		}
 
 		data = data.concat([{
-			kind: api.next['arg'],
+			kind: api.next['input'],
 			data: call
 		}]);
 
-		return { frst: data, scnd: api.next['arg'].exec };
+		return { frst: data, scnd: api.next['input'].exec };
 		//console.log(call)
 		//throw new Error('handle api not defined');
 	}
@@ -365,7 +396,7 @@ export class MagicInterpreter {
 			throw new Error("Interpreter not initialized!");
 		}
 
-		if(exec === "reduction") {
+		if(exec === "reduce") {
 			if(call.length > 1) {
 				throw new Error("reduce method expects only one argument expression");
 			}
