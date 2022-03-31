@@ -4,7 +4,7 @@ import '../styles/dropdown.scss'
 
 
 
-export const Submenu = ({ opts, lang, setLang }: {
+export const Submenu = ({ opts, setLang }: {
 	opts: string[],
 	lang: string,
 	setLang: React.Dispatch<React.SetStateAction<string>>

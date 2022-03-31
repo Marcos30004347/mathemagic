@@ -1,5 +1,4 @@
 
-import { TokenKind } from "../lexer";
 import { APILexer, APIToken, APITokenKind } from "./lexer"
 
 export enum APIKind {

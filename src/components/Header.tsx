@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
-
-import { LanguageSelection } from './CultureSelector'
+import React from 'react';
 
 import { Dropdown } from './Dropdown'
 
 import '../styles/magic-header.css'
 
 function Logo() {
-	// <div className="magic-logo-text">Mathemagic</div>
-	// <div className="magic-logo-text">MAGIC!</div>
 	return (
 		<header className="magic-logo">
 			<div className="magic-logo-text">magicmath.xyz</div>
