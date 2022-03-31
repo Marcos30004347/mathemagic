@@ -115,7 +115,16 @@ export class APILexer {
 
 		while (
 			this.head < this.src.length &&
-			isAlphaNumeric(this.src,this.head)
+			(isAlphaNumeric(this.src,this.head) ||
+				this.src[this.head] === "=" ||
+				this.src[this.head] === "(" ||
+				this.src[this.head] === ")" ||
+				this.src[this.head] === "-" ||
+				this.src[this.head] === "+" ||
+				this.src[this.head] === "^" ||
+				this.src[this.head] === "/" ||
+				this.src[this.head] === "*"
+			)
 		) {
 			v = v + this.src[this.head];
 

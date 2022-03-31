@@ -117,7 +117,6 @@ export class MagicParser {
 				}
 			}
 
-			console.log("abbbbb");
 			curr = this.lex.nextOf(TokenKind.CLOSE_PARENTHESIS);
 
 			const node = new ASTNode(ASTKind.AST_FUNC_CALL);
@@ -128,20 +127,6 @@ export class MagicParser {
 
 			return node;
 		}
-
-
-		// if (curr.kind == TokenKind.IDENTIFIER) {
-		// 	const root = new ASTNode(ASTKind.AST_PHRASE);
-		// 	const node = new ASTNode(ASTKind.AST_PHRASE);
-
-		// 	root.setLeftOperator(name);
-
-		// 	node.setLeftOperator(this.parseIdentifier());
-
-		// 	root.setRightOperator(node);
-
-		// 	return root;
-		// }
 
 		return name;
 	}
@@ -176,8 +161,23 @@ export class MagicParser {
 			const node = this.parseTerm();
 			curr = this.lex.nextOf(TokenKind.CLOSE_PARENTHESIS);
 
+			if (
+				!this.lex.spaced &&
+				curr.kind == TokenKind.OPEN_PARENTHESIS ||
+				curr.kind == TokenKind.NUMBER_LITERAL ||
+				curr.kind == TokenKind.IDENTIFIER
+			) {
+				const root = new ASTNode(ASTKind.AST_OP_MUL);
+
+				root.setLeftOperator(node);
+				root.setRightOperator(this.parsePrimary());
+
+				return root;
+			}
+
 			return node;
 		}
+
 
 		return this.parseLiteral();
 	}
@@ -187,7 +187,7 @@ export class MagicParser {
 
 		const curr = this.lex.curr;
 
-		if(curr.kind == TokenKind.POW) {
+		if (curr.kind == TokenKind.POW) {
 			this.lex.nextOf(TokenKind.POW);
 
 			const node = new ASTNode(ASTKind.AST_OP_POW, curr);
@@ -203,7 +203,6 @@ export class MagicParser {
 
 	parseUnary(): ASTNode {
 		const curr = this.lex.curr;
-
 		if (curr.kind == TokenKind.MINUS) {
 			this.lex.nextOf(TokenKind.MINUS);
 
@@ -246,10 +245,21 @@ export class MagicParser {
 			return node;
 		}
 
-		if (curr.kind == TokenKind.MUL) {
+		const is_mul = curr.kind == TokenKind.MUL;
+
+		const is_num_mul = root.kind === ASTKind.AST_NUMBER && (
+			curr.kind == TokenKind.OPEN_PARENTHESIS ||
+			curr.kind == TokenKind.IDENTIFIER
+		);
+
+		const is_sym_mul = !this.lex.spaced && (root.kind === ASTKind.AST_STRING && curr.kind === TokenKind.NUMBER_LITERAL)
+
+		if (is_mul || is_num_mul || is_sym_mul) {
 			const node = new ASTNode(ASTKind.AST_OP_MUL, curr);
 
-			this.lex.nextOf(TokenKind.MUL);
+			if (curr.kind == TokenKind.MUL) {
+				this.lex.nextOf(TokenKind.MUL);
+			}
 
 			const deno = this.parseFactor();
 
@@ -302,20 +312,15 @@ export class MagicParser {
 
 		const curr = this.lex.curr;
 
-		if(
-			curr.kind != TokenKind.EOF &&
-			curr.kind != TokenKind.COMMA
-		) {
-			const node = new ASTNode(ASTKind.AST_PHRASE);
+		const node = new ASTNode(ASTKind.AST_PHRASE);
 
-			node.setLeftOperator(root);
+		node.setLeftOperator(root);
 
+		if (curr.kind != TokenKind.EOF && curr.kind != TokenKind.COMMA) {
 			node.setRightOperator(this.parsePhrase());
-
-			return node;
 		}
 
-		return root;
+		return node;
 	}
 
 	parseCompoundList(): ASTNode {
@@ -323,7 +328,7 @@ export class MagicParser {
 
 		const curr = this.lex.curr;
 
-		if(curr.kind == TokenKind.COMMA) {
+		if (curr.kind == TokenKind.COMMA) {
 			const node = new ASTNode(ASTKind.AST_COMPOUND_LIST, curr);
 
 			node.setLeftOperator(root);
@@ -338,33 +343,33 @@ export class MagicParser {
 
 
 
-	parseAssignment(): ASTNode {
-		const root = this.parseCompoundList();
+	// parseAssignment(): ASTNode {
+	// 	const root = this.parseCompoundList();
 
-		const curr = this.lex.curr;
+	// 	const curr = this.lex.curr;
 
-		if (curr.kind == TokenKind.EQUAL) {
-			const node = new ASTNode(ASTKind.AST_OP_EQUAL, curr);
+	// 	if (curr.kind == TokenKind.EQUAL) {
+	// 		const node = new ASTNode(ASTKind.AST_OP_EQUAL, curr);
 
-			this.lex.nextOf(TokenKind.EQUAL);
+	// 		this.lex.nextOf(TokenKind.EQUAL);
 
-			const oper = this.parseTerm();
+	// 		const oper = this.parseTerm();
 
-			node.setLeftOperator(root);
-			node.setRightOperator(oper);
+	// 		node.setLeftOperator(root);
+	// 		node.setRightOperator(oper);
 
-			return node;
-		}
+	// 		return node;
+	// 	}
 
-		return root;
-	}
+	// 	return root;
+	// }
 
-	parseExpression(): ASTNode {
-		return this.parseAssignment();
-	}
+	// parseExpression(): ASTNode {
+	// 	return this.parseAssignment();
+	// }
 
 	parseStatement(): ASTNode {
-		return this.parseExpression();
+		return this.parseCompoundList();
 	}
 
 	parse() {
@@ -381,7 +386,6 @@ export class MagicParser {
 
 			stmt = next;
 		}
-
 		return root;
 	}
 }

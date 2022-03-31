@@ -1,0 +1,104 @@
+
+.code-input {
+		height: 2em;
+		width: 1000px;
+		font-size: 1em;
+		color: black;
+		border: 0.1em solid gray;
+		padding: 0.5em;
+		border-radius: 25px;
+		margin-bottom: 2em;
+}
+
+.code-button {
+		border: 0px;
+		font-size: 1em;
+		width: 6em;
+		padding: 0.5em;
+		color: white;
+		background-color: red;
+		border-radius: 25px;
+		text-align: center;
+		float: right;
+}
+
+.code-input-container {
+		width: 1200px;
+		align-items: center;
+		margin-bottom: 1em;
+}
+
+.code-output-cell {
+		margin-bottom: 1em;
+}
+
+.code-output-header {
+		padding: .5em;
+		color: white;
+		background-color: gray;
+}
+
+.code-output-content {
+		padding: 1em;
+}
+
+.code-input-menu {
+		margin: 0;
+		padding: 0;
+		display: flex;
+}
+
+.code-input-button {
+		border: 0px;
+		font-size: 1em;
+		padding: 0.5em;
+		color: white;
+		background-color: red;
+		text-align: center;
+		float: right;
+		margin-right: 1em;
+		margin-bottom: 1em;
+}
+
+.code-input-button.selected {
+		text-decoration:underline;
+}
+
+.magic-interpreter {
+		font-family: 'Nunito', sans-serif;
+}
+
+.docs {
+		border-bottom: 1px solid black;
+}
+
+.docs-title {
+		display: flex;
+}
+
+.docs-query-word {
+		margin-right: 0.5em;
+		font-weight: bold;
+}
+
+.docs-query {
+}
+
+.docs-title {
+		font-size: 1.3em;
+		margin-top: 1em;
+}
+
+.docs-description-title {
+		font-size: 1em;
+		margin-top: 1em;
+		margin-bottom: 0.5em;
+		font-weight: bold;
+}
+
+.docs-example-title {
+		font-size: 1em;
+		margin-top: 1em;
+		margin-bottom: 1.5em;
+		font-weight: bold;
+}

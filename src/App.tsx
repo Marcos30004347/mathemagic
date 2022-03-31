@@ -11,14 +11,8 @@ import 'katex/dist/katex.min.css';
 
 import './styles/magic-page.css'
 
-import { APIParser } from './lib/api/parser';
-
 function App() {
 	const [language, setLanguage] = useState(navigator.language);
-
-	const parser = new APIParser("reduced form of {0:expression}");
-
-	console.log(parser.parse());
 
 	return (
 		<div className='magic-app'>

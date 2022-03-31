@@ -1,9 +1,18 @@
 {
 	"querys": [
 		{
-			"func": "reduced form of { 0 : expression }",
-			"desc": "reduce a expression to its minimal form",
-			"exec": "reduce"
-		}
+			"query": "compute { 0 : expression }",
+			"brief": "compute the minimal form of an expression",
+			"exec": "reduce",
+			"example": "compute 3x + 4x",
+			"output": "{ 0 } = { output }"
+	},
+			{
+			"query": "plot { 0 : expression }",
+			"brief": "plot the expression",
+			"exec": "plot",
+			"example": "plot x^2 + 4x",
+			"output": "{ 0 }"
+	}
 	]
 }

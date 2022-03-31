@@ -1,13 +1,15 @@
 
+import { TokenKind } from "../lexer";
 import { APILexer, APIToken, APITokenKind } from "./lexer"
 
 export enum APIKind {
 	API_ERROR,
 	API_PHRASE,
 	API_ARG,
+	API_TEMPLATE,
+	API_OUTPUT,
 	API_NUMBER_LITERAL,
 	API_STRING_LITERAL,
-
 	API_EXP_TYPE,
 	API_INT_TYPE,
 	API_STR_TYPE,
@@ -51,8 +53,8 @@ export function ParsingError(message: string, line: number, column: number) {
 export class APIParser {
 	lex: APILexer;
 
-	constructor(src: string) {
-		this.lex = new APILexer(src);
+	constructor() {
+		this.lex = new APILexer('');
 	}
 
 	parseIdentifier(): APINode {
@@ -110,21 +112,50 @@ export class APIParser {
 		throw new Error("Undefined type");
 	}
 
+	parseStringArgument(): APINode {
+		if(this.lex.curr.value === "output") {
+			const curr = this.lex.curr;
+
+			this.lex.nextOf(APITokenKind.IDENTIFIER);
+
+			return new APINode(APIKind.API_OUTPUT,curr);
+		}
+
+		throw new Error('invalid template string argument');
+	}
+
 	parseArgument(): APINode {
+		if(this.lex.curr.kind === APITokenKind.IDENTIFIER) {
+			const node = new APINode(APIKind.API_TEMPLATE);
+
+			const key = this.parseStringArgument();
+
+			node.setLeftOperator(key);
+
+			return node;
+		}
+
 		const key = this.parseNumber();
 
-		this.lex.nextOf(APITokenKind.TWO_POINTS);
+		if(this.lex.curr.kind === APITokenKind.TWO_POINTS) {
+			this.lex.nextOf(APITokenKind.TWO_POINTS);
 
-		const typ = this.parseType();
+			const typ = this.parseType();
 
-		const node = new APINode(APIKind.API_ARG);
+			const node = new APINode(APIKind.API_ARG);
+
+			node.setLeftOperator(key);
+			node.setRightOperator(typ);
+
+			return node;
+		}
+
+		const node = new APINode(APIKind.API_TEMPLATE);
 
 		node.setLeftOperator(key);
-		node.setRightOperator(typ);
 
 		return node;
 	}
-
 
 	parsePrimary(): APINode {
 		let curr = this.lex.curr;
@@ -163,9 +194,9 @@ export class APIParser {
 		return this.parsePhrase();
 	}
 
-	parse() {
+	parse(src: string) {
+		this.lex = new APILexer(src);
 		this.lex.next();
-
 		return this.parseAPI();
 	}
 }

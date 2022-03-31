@@ -10,28 +10,27 @@
 
 .magic-logo {
 	align-items: center;
-	/* background-color:black; */
-	/* color: white; */
-	padding: 1em;
+	padding: 0.5em;
 	display: flex;
 	justify-content: center;
 	font-size: 1.5em;
+	margin: 1em;
 }
 
 .magic-logo-text {
 	font-family: 'Nunito';
 	font-weight: 700;
-
-	/*
-	background-image: linear-gradient(to right, #4CB8C4, #3CD3AD);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	*/
 }
 
-.magic-logo-text1 {
-  font-family: 'Times New Roman', serif;
-	color: black;
+.magic-logo-beta {
+	/* width: 1em; */
+	/* height: 0.5em; */
+	font-size: 0.5em;
+	font-family: 'Nunito';
+	color: white;
+	margin: 0.5em;
+	padding: 0.2em;
+	background-color: red;
 }
 
 .magic-header {
@@ -39,7 +38,6 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 2em;
 }
 
 .header-menu {
