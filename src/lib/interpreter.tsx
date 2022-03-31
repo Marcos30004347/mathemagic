@@ -5,7 +5,7 @@ import { MagicParser, ASTNode, ASTKind } from './parser'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import gauss from './gauss/gauss'
+import * as gauss from 'gauss-js'
 
 import katex from 'katex'
 
