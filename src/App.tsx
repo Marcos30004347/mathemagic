@@ -16,7 +16,7 @@ function App() {
 
 	return (
 		<div className='magic-app'>
-			<Header language={language} setLanguage={setLanguage}/>
+			<Header/>
 			<Interpreter language={language} setLanguage={setLanguage}/>
 			<SocialMedia/>
 			<div style={{

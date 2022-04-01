@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Dropdown } from './Dropdown'
-
 import '../styles/magic-header.css'
 
 function Logo() {
@@ -13,10 +11,7 @@ function Logo() {
 	);
 }
 
-export const Header = ({ language, setLanguage }: {
-	language: string,
-	setLanguage: React.Dispatch<React.SetStateAction<string>>
-}) => {
+export const Header = () => {
 	return (
 		<div className='magic-header'>
 			<div className='menu'>
