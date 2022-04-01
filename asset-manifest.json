@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/magicmath/static/css/main.7baace7e.css",
-    "main.js": "/magicmath/static/js/main.4a7dc673.js",
+    "main.css": "/magicmath/static/css/main.fc666550.css",
+    "main.js": "/magicmath/static/js/main.df7149fc.js",
     "static/js/787.f64bcdca.chunk.js": "/magicmath/static/js/787.f64bcdca.chunk.js",
     "static/media/Nunito-VariableFont_wght.ttf": "/magicmath/static/media/Nunito-VariableFont_wght.e832734fe3e30d1edb43.ttf",
     "static/media/KaTeX_AMS-Regular.ttf": "/magicmath/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
@@ -65,12 +65,12 @@
     "static/media/KaTeX_Size3-Regular.woff": "/magicmath/static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "/magicmath/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
     "index.html": "/magicmath/index.html",
-    "main.7baace7e.css.map": "/magicmath/static/css/main.7baace7e.css.map",
-    "main.4a7dc673.js.map": "/magicmath/static/js/main.4a7dc673.js.map",
+    "main.fc666550.css.map": "/magicmath/static/css/main.fc666550.css.map",
+    "main.df7149fc.js.map": "/magicmath/static/js/main.df7149fc.js.map",
     "787.f64bcdca.chunk.js.map": "/magicmath/static/js/787.f64bcdca.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7baace7e.css",
-    "static/js/main.4a7dc673.js"
+    "static/css/main.fc666550.css",
+    "static/js/main.df7149fc.js"
   ]
 }
