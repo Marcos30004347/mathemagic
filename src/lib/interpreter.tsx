@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 import { MagicParser, ASTNode, ASTKind } from './parser'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line
 // @ts-ignore
 import * as gauss from 'gauss-js'
 
@@ -16,7 +16,7 @@ import '../styles/interpreter.scss'
 import { APIKind, APINode, APIParser } from './api/parser'
 
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line
 // @ts-ignore
 import functionPlot from "function-plot";
 
