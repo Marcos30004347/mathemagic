@@ -70,8 +70,6 @@ function FunctionPlot(args: {
 		functionPlot({
 			target: "#" + args.id,
 			grid: true,
-			width: 1200,
-			height: 700,
 			// xAxis: { domain: [args.xAxis.domain.start, args.xAxis.domain.end] },
 			// yAxis: { domain: [args.yAxis.domain.start, args.yAxis.domain.end] },
 			data: [
@@ -536,7 +534,7 @@ export class MagicInterpreter {
 			return parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output)));
 		}
 
-		if(query.exec === "plot") {
+		if (query.exec === "plot") {
 			return (
 				<div>
 					{parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(args[0].expr), query.output)))}
@@ -612,14 +610,14 @@ export class MagicInterpreter {
 				<div className='docs' key={docs.length}>
 					<div>
 						<div className='docs-title'>
-							<div className='docs-query'><span className='docs-query-word'>query:</span> {query.query}</div>
+							<div className='docs-query'><span className='docs-query-word'>Query:</span> {query.query}</div>
 						</div>
-						<div className='docs-description-title'>description:</div>
+						<div className='docs-description-title'>Description:</div>
 						<div className='docs-brief'>{query.brief}</div>
-						<div className='docs-example-title'>example:</div>
+						<div className='docs-example-title'>Example:</div>
 
 						<div className='code-input-container'>
-							<input type="text" className='code-input' value={query.example} />
+							<input type="text" className='code-input' value={query.example} onChange={(e) => { e.preventDefault() }} />
 							<button className='code-button'>Submit</button>
 						</div>
 						<div>{this.compileElement(query.example, 0)}</div>
@@ -632,36 +630,55 @@ export class MagicInterpreter {
 	}
 
 	public compileElement(src: string, key: number): JSX.Element {
-		let program = new ASTNode(ASTKind.AST_ERROR);
-
 		try {
-			program = this.parse(src);
-		} catch (err) {
-			return <div key={key}> {(err as Error).message} </div>
-		}
+			let program = new ASTNode(ASTKind.AST_ERROR);
 
-		if (program.left == undefined) {
-			return <div key={key}></div>
-		}
+			try {
+				program = this.parse(src);
+			} catch (err) {
+				return <div key={key}> {(err as Error).message} </div>
+			}
 
-		const node = program.left;
+			if (program.left == undefined) {
+				return <div key={key}></div>
+			}
 
-		const api = this.api;
+			const node = program.left;
 
-		const call = this.handleAPICall(api, node);
+			const api = this.api;
+			const call = this.handleAPICall(api, node);
 
-		return (
-			<div key={key} className="code-output-cell">
-				<div className='code-output-header'>
-					{src}
+			return (
+				<div key={key} className="code-output-cell">
+					<div className='code-output-header'>
+						{src}
+					</div>
+					<div className='code-output-content'>
+						{
+							this.executeHandler(key, call)
+						}
+					</div>
 				</div>
-				<div className='code-output-content'>
-					{
-						this.executeHandler(key, call)
-					}
+			);
+		} catch (e) {
+			const err = e as Error;
+			return (
+				<div key={key} className="code-output-cell">
+					<div className='code-output-header'>
+						{src}
+					</div>
+					<div className='code-output-content'>
+						<div>
+							<span style={{ backgroundColor: 'red', padding: '5px', color: 'white' }}>Error:</span> {err.message}
+						</div>
+						<div style={{ marginTop: '20px' }}>
+							Please, take a look at the docs tag for more information on how to form queries.
+						</div>
+					</div>
 				</div>
-			</div>
-		);
+			);
+
+		}
 	}
 
 }

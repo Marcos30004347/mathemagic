@@ -7,8 +7,8 @@ import '../styles/magic-header.css'
 function Logo() {
 	return (
 		<header className="magic-logo">
-			<div className="magic-logo-text">magicmath.xyz</div>
-			<div className="magic-logo-beta">beta</div>
+			<div className="magic-logo-text0">mathe</div>
+			<div className="magic-logo-text1">magic</div>
 		</header>
 	);
 }
@@ -22,7 +22,6 @@ export const Header = ({ language, setLanguage }: {
 			<div className='menu'>
 				<Logo />
 			</div>
-			<Dropdown lang={language} setLang={setLanguage} />
 		</div>
 	);
 }

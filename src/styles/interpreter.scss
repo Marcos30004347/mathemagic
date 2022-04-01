@@ -1,63 +1,85 @@
+.interpreter {
+		width: 80%;
+		max-width: 700px;
+}
 
 .code-input {
+		font-family: 'Comfortaa', cursive;
 		height: 2em;
-		width: 1000px;
+		width: 80%;
 		font-size: 1em;
 		color: black;
-		border: 0.1em solid gray;
+		border: 2px solid #D62828;
 		padding: 0.5em;
-		border-radius: 25px;
 		margin-bottom: 2em;
 }
 
+.code-input:focus {
+		outline: 0px;
+}
+
 .code-button {
+
+		font-family: 'Comfortaa', cursive;
 		border: 0px;
 		font-size: 1em;
-		width: 6em;
+		width: 20%;
+		height: 2em;
 		padding: 0.5em;
 		color: white;
-		background-color: red;
-		border-radius: 25px;
+		background-color: #D62828;
 		text-align: center;
 		float: right;
 }
 
 .code-input-container {
-		width: 1200px;
 		align-items: center;
 		margin-bottom: 1em;
 }
 
 .code-output-cell {
+		background-color: white;
 		margin-bottom: 1em;
+		width: inherit;
 }
 
 .code-output-header {
 		padding: .5em;
 		color: white;
-		background-color: gray;
+		background-color: #D62828;
 }
 
 .code-output-content {
 		padding: 1em;
+		color: black;
+		overflow: auto;
+		width: inherit;
 }
 
 .code-input-menu {
+		display: flex;
+		margin: 0;
+		padding: 0;
+		justify-content: space-between;
+}
+
+.code-input-tabs {
 		margin: 0;
 		padding: 0;
 		display: flex;
 }
 
 .code-input-button {
+		font-family: 'Comfortaa', cursive;
 		border: 0px;
 		font-size: 1em;
 		padding: 0.5em;
 		color: white;
-		background-color: red;
+		background-color: #D62828;
+
 		text-align: center;
-		float: right;
-		margin-right: 1em;
-		margin-bottom: 1em;
+		margin-right: 5px;
+		margin-bottom: 5px;
 }
 
 .code-input-button.selected {
@@ -69,6 +91,7 @@
 }
 
 .docs {
+		color: white;
 		border-bottom: 1px solid black;
 }
 

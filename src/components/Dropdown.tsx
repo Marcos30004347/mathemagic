@@ -33,7 +33,7 @@ export const Dropdown = ({ lang, setLang }: {
 				<li
 					className="nav__menu-item"
 				>
-					<a>{lang}</a>
+					<a>Idiom: {lang}</a>
 					<Submenu opts={['pt-BR', 'en-US']} lang={lang} setLang={setLang} />
 				</li>
 			</ul>

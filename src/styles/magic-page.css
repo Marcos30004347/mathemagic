@@ -8,13 +8,8 @@
 }
 
 body {
-}
-
-textarea {
-		height:20px;
-		width:500px;
-		overflow:hidden;
-		resize: none;
+		height: 100vh;
+		background-color: #F77F00;
 }
 
 .graphic {

@@ -9,17 +9,28 @@
 }
 
 .magic-logo {
-	align-items: center;
-	padding: 0.5em;
 	display: flex;
-	justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+	background-color: #D62828;
+	color: white;
+	padding: 0.5em;
 	font-size: 1.5em;
 	margin: 1em;
 }
 
-.magic-logo-text {
-	font-family: 'Nunito';
-	font-weight: 700;
+.magic-logo-text0 {
+	font-family: 'Comfortaa', cursive;
+	background-clip: text;
+	color: white;
+
+	/* background-image: radial-gradient(circle at 30% 107%, #7bdaff 0%, #11edfd 5%, #5f86f3 45%, #6c69f1 60%, #ef15f7 90%); */
+
+}
+
+.magic-logo-text1 {
+font-family: 'Comfortaa', cursive;
 }
 
 .magic-logo-beta {

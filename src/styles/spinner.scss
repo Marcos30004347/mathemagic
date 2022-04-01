@@ -1,10 +1,13 @@
 .loader {
-  border: 0.2em solid #f3f3f3; /* Light grey */
-  border-top: 0.2em solid black;
+  border: 0.2em solid white; /* Light grey */
+  border-top: 0.2em solid #D62828;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 2s linear infinite;
+	position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
 }
 
 @keyframes spin {

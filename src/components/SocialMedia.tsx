@@ -6,7 +6,7 @@ export const SocialMedia = () => {
 	return (
 		<div className='social-media-menu'>
 			<a href="https://github.com/Marcos30004347/mathapp">
-				<img src={'./svg/social/icons8-github-48.svg'} className="social-media-item" alt="github" />
+				<img src={'./svg/social/iconmonstr-github-2.svg'} className="social-media-item" alt="github" />
 			</a>
 
 		</div>

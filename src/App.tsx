@@ -17,8 +17,16 @@ function App() {
 	return (
 		<div className='magic-app'>
 			<Header language={language} setLanguage={setLanguage}/>
-			<Interpreter idiom={language} />
+			<Interpreter language={language} setLanguage={setLanguage}/>
 			<SocialMedia/>
+			<div style={{
+				position: 'fixed',
+				bottom: '0px',
+				color: 'white',
+				fontSize: '0.5em',
+				backgroundColor: '#F77F00',
+				padding: '20px'
+			}}>This is an Open Source project and it still on development, currently by only one programmer on its free time. If you like the project, consider give it a star on github, and if you have any programming skills, consider contributing to the project.</div>
 		</div>
 	);
 }

@@ -5,10 +5,12 @@ import { MagicInterpreter } from '../lib/interpreter'
 import { Spinner } from './Spinner'
 
 import '../styles/interpreter.scss'
+import { Dropdown } from './Dropdown'
 
 
 const CodeInput = (args: {
 	idiom: string,
+	setLanguage: React.Dispatch<React.SetStateAction<string>>
 }) => {
 
 	const [tab, setTab] = useState('query');
@@ -73,24 +75,35 @@ const CodeInput = (args: {
 
 	return (
 		<div>
-			<ul className='code-input-menu'>
-				<button className={'code-input-button' + (tab === 'query' ? ' selected' : '')} onClick={() => setTab('query')}>query</button>
-				<button className={'code-input-button' + (tab === 'docs' ? ' selected' : '')} onClick={() => setTab('docs')}>docs</button>
-			</ul>
-
 			{
-				isLoading ? <Spinner /> : renderContent(tab)
+				isLoading ? <Spinner /> : <div>
+					<div className='code-input-menu'>
+						<ul className='code-input-tabs'>
+							<button className={'code-input-button' + (tab === 'query' ? ' selected' : '')} onClick={() => setTab('query')}>query</button>
+							<button className={'code-input-button' + (tab === 'docs' ? ' selected' : '')} onClick={() => setTab('docs')}>docs</button>
+
+
+						</ul>
+						<Dropdown lang={args.idiom} setLang={args.setLanguage} />
+					</div>
+					{
+						renderContent(tab)
+					}
+				</div>
 			}
 
 		</div>
 	)
 }
 
-export const Interpreter = (props: { idiom: string }) => {
+export const Interpreter = ({ language, setLanguage }: {
+	language: string,
+	setLanguage: React.Dispatch<React.SetStateAction<string>>
+}) => {
 
 	return (
-		<div className='magic-interpreter'>
-			<CodeInput key={0} idiom={props.idiom} />
+		<div className='interpreter'>
+			<CodeInput key={0} idiom={language} setLanguage={setLanguage}/>
 		</div>
 	)
 }
