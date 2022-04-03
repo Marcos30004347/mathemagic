@@ -19,6 +19,8 @@ export enum ASTKind {
 	AST_COMPOUND_LIST,
 }
 
+// TODO: add matrix parsing
+
 export class ASTNode {
 	kind: ASTKind;
 
@@ -178,7 +180,6 @@ export class MagicParser {
 			return node;
 		}
 
-
 		return this.parseLiteral();
 	}
 
@@ -247,14 +248,19 @@ export class MagicParser {
 
 		const is_mul = curr.kind == TokenKind.MUL;
 
-		const is_num_mul = root.kind === ASTKind.AST_NUMBER && (
+		const is_num_mul = !this.lex.spaced && root.kind === ASTKind.AST_NUMBER && (
 			curr.kind == TokenKind.OPEN_PARENTHESIS ||
 			curr.kind == TokenKind.IDENTIFIER
 		);
 
-		const is_sym_mul = !this.lex.spaced && (root.kind === ASTKind.AST_STRING && curr.kind === TokenKind.NUMBER_LITERAL)
+		const is_sym_mul = !this.lex.spaced && ((root.kind === ASTKind.AST_STRING || root.kind === ASTKind.AST_FUNC_CALL) && curr.kind === TokenKind.NUMBER_LITERAL)
 
-		if (is_mul || is_num_mul || is_sym_mul) {
+		const is_func_mul = !this.lex.spaced && root.kind === ASTKind.AST_FUNC_CALL && (
+			curr.kind == TokenKind.OPEN_PARENTHESIS ||
+			curr.kind == TokenKind.IDENTIFIER
+		)
+
+		if (is_mul || is_num_mul || is_sym_mul || is_func_mul) {
 			const node = new ASTNode(ASTKind.AST_OP_MUL, curr);
 
 			if (curr.kind == TokenKind.MUL) {
@@ -340,33 +346,6 @@ export class MagicParser {
 
 		return root;
 	}
-
-
-
-	// parseAssignment(): ASTNode {
-	// 	const root = this.parseCompoundList();
-
-	// 	const curr = this.lex.curr;
-
-	// 	if (curr.kind == TokenKind.EQUAL) {
-	// 		const node = new ASTNode(ASTKind.AST_OP_EQUAL, curr);
-
-	// 		this.lex.nextOf(TokenKind.EQUAL);
-
-	// 		const oper = this.parseTerm();
-
-	// 		node.setLeftOperator(root);
-	// 		node.setRightOperator(oper);
-
-	// 		return node;
-	// 	}
-
-	// 	return root;
-	// }
-
-	// parseExpression(): ASTNode {
-	// 	return this.parseAssignment();
-	// }
 
 	parseStatement(): ASTNode {
 		return this.parseCompoundList();

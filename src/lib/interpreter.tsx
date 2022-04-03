@@ -29,8 +29,15 @@ type APIQueryDesc = {
 	output: string,
 };
 
+type APIFunctionDesc = {
+	name: string,
+	args: string[],
+	func: string,
+};
+
 type APIDesc = {
-	querys: APIQueryDesc[]
+	querys: APIQueryDesc[],
+	functions: APIFunctionDesc[],
 }
 
 type APIDocDesc = {
@@ -53,7 +60,17 @@ type MagicAPIArgument = {
 	next: { [key: string]: MagicAPINode },
 };
 
-type MagicAPINode = MagicAPIArgument | MagicAPIWord | APIDocDesc
+type MagicAPINode = MagicAPIArgument | MagicAPIWord | APIDocDesc;
+
+type APIFunction = {
+	exec: string,
+	args: string[],
+};
+
+type API = {
+	querys: MagicAPINode,
+	functions: {[key: string]: APIFunction }
+};
 
 function InterpreterError(msg: string) {
 	throw new Error(msg);
@@ -88,13 +105,21 @@ function FunctionPlot(args: {
 export class MagicInterpreter {
 	culture: string;
 
-	api: MagicAPINode;
+	api: API;
 
 	scope: gauss.Scope | null;
 
 	constructor() {
 		this.culture = "en-US";
-		this.api = { kind: 'word', next: {} };
+
+		this.api = {
+			querys: {
+				kind: 'word',
+				next: {}
+			},
+			functions: {},
+		};
+
 		this.scope = null;
 	}
 
@@ -119,7 +144,13 @@ export class MagicInterpreter {
 	public async init(culture: string) {
 		this.culture = culture;
 
-		this.api = { kind: 'word', next: {} };
+		this.api = {
+			querys: {
+				kind: 'word',
+				next: {}
+			},
+			functions: {},
+		};
 
 		await this.fetchAPI(culture);
 
@@ -136,13 +167,23 @@ export class MagicInterpreter {
 		gauss.scopeDestroy(this.scope)
 	}
 
+
 	private registerAPI(dsc: APIDesc) {
 		const parser = new APIParser();
+
+		this.api.functions = {};
+
+		for(const func of dsc.functions) {
+			this.api.functions[func.name] = {
+				exec: func.func,
+				args: func.args
+			};
+		}
 
 		for (const func of dsc.querys) {
 			let node: APINode | undefined = parser.parse(func.query);
 
-			let api = this.api;
+			let api = this.api.querys;
 
 			while (node) {
 				if (!node.left) {
@@ -239,14 +280,10 @@ export class MagicInterpreter {
 			return InterpreterError('scope not initialized');
 		}
 		if (tree.kind == ASTKind.AST_NUMBER) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.numberFromDouble(this.scope, Number(tree.token?.value));
 		}
 
 		if (tree.kind == ASTKind.AST_STRING) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.symbol(this.scope, tree.token?.value);
 		}
 
@@ -259,8 +296,6 @@ export class MagicInterpreter {
 				return InterpreterError('right operand is not defined');
 			}
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.add(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
 
@@ -273,9 +308,6 @@ export class MagicInterpreter {
 			if (tree.right == null) {
 				return InterpreterError('right operand is not defined');
 			}
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.sub(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
 
@@ -287,9 +319,6 @@ export class MagicInterpreter {
 			if (tree.right == null) {
 				return InterpreterError('right operand is not defined');
 			}
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.mul(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
 
@@ -301,8 +330,6 @@ export class MagicInterpreter {
 			if (tree.right == null) {
 				return InterpreterError('right operand is not defined');
 			}
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.pow(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
 
@@ -315,11 +342,142 @@ export class MagicInterpreter {
 			if (tree.right == null) {
 				return InterpreterError('right operand is not defined');
 			}
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			return gauss.div(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
+
+		if(tree.kind == ASTKind.AST_FUNC_CALL) {
+			if(!tree.left || !tree.left.token) throw new Error('Invalid Function name');
+			if(!tree.right) throw new Error('Invalid function arguments');
+
+			const name = tree.left.token.value;
+
+			let arg : ASTNode | undefined = tree.right;
+
+			let args : any[] = [];
+
+			while(arg) {
+				if(!arg.left) throw new Error('Function argument is undefined');
+
+				args = args.concat([
+					this.compileAlgExpression(arg.left)
+				]);
+
+				arg = arg.right;
+			}
+
+			if(this.api.functions[name].exec === 'sin') {
+				if(args.length != 1) throw new Error('The sine function expects exactly 1 argument!');
+				return gauss.sin(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'cos') {
+				if(args.length != 1) throw new Error('The cosine function expects exactly 1 argument!');
+				return gauss.cos(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'tan') {
+				if(args.length != 1) throw new Error('The tangent function expects exactly 1 argument!');
+				return gauss.tan(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'sinh') {
+				if(args.length != 1) throw new Error('The hyperbolic sine function expects exactly 1 argument!');
+				return gauss.sinh(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'cosh') {
+				if(args.length != 1) throw new Error('The hyperbolic cosine function expects exactly 1 argument!');
+				return gauss.cosh(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'tanh') {
+				if(args.length != 1) throw new Error('The hyperbolic tangent function expects exactly 1 argument!');
+				return gauss.tanh(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'csc') {
+				if(args.length != 1) throw new Error('The cosecant function expects exactly 1 argument!');
+				return gauss.csc(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'cot') {
+				if(args.length != 1) throw new Error('The cotangent function expects exactly 1 argument!');
+				return gauss.cot(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'sec') {
+				if(args.length != 1) throw new Error('The secant function expects exactly 1 argument!');
+				return gauss.sec(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'coth') {
+				if(args.length != 1) throw new Error('The hyperbolic cotangent function expects exactly 1 argument!');
+				return gauss.coth(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'sech') {
+				if(args.length != 1) throw new Error('The hyperbolic secant function expects exactly 1 argument!');
+				return gauss.sech(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'csch') {
+				if(args.length != 1) throw new Error('The hyperbolic cosecant function expects exactly 1 argument!');
+				return gauss.csch(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arccsch') {
+				if(args.length != 1) throw new Error('The inverse hyperbolic cosecant function expects exactly 1 argument!');
+				return gauss.arccsch(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arccsc') {
+				if(args.length != 1) throw new Error('The inverse cosecant function expects exactly 1 argument!');
+				return gauss.arccsc(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arcsech') {
+				if(args.length != 1) throw new Error('The inverse hyperbolic secant function expects exactly 1 argument!');
+				return gauss.arcsech(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arccosh') {
+				if(args.length != 1) throw new Error('The inverse hyperbolic cosine function expects exactly 1 argument!');
+				return gauss.arccosh(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arctanh') {
+				if(args.length != 1) throw new Error('The inverse hyperbolic tanhent function expects exactly 1 argument!');
+				return gauss.arccosh(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arcsec') {
+				if(args.length != 1) throw new Error('The inverse secant function expects exactly 1 argument!');
+				return gauss.arcsec(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arccot') {
+				if(args.length != 1) throw new Error('The inverse cotangent function expects exactly 1 argument!');
+				return gauss.arccot(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arccos') {
+				if(args.length != 1) throw new Error('The inverse cosine function expects exactly 1 argument!');
+				return gauss.arccos(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arcsin') {
+				if(args.length != 1) throw new Error('The inverse sine function expects exactly 1 argument!');
+				return gauss.arcsin(this.scope, args[0]);
+			}
+
+			if(this.api.functions[name].exec === 'arctan') {
+				if(args.length != 1) throw new Error('The inverse tangent function expects exactly 1 argument!');
+				return gauss.arctan(this.scope, args[0]);
+			}
+
+			throw new Error("Function '" + name + "' is not defined on the API");
+		}
+
 
 		return InterpreterError('tree is not a valid expression');
 	}
@@ -348,6 +506,8 @@ export class MagicInterpreter {
 
 
 	private handleAPICall(api: MagicAPINode, call?: ASTNode) {
+		console.log(call)
+		console.log("ahahahah")
 		if (!call) {
 			throw new Error('call tree not defined');
 		}
@@ -362,7 +522,6 @@ export class MagicInterpreter {
 			}
 		} = {};
 
-		console.log(call)
 
 		while (api.kind != "query") {
 			if (!call) {
@@ -379,9 +538,6 @@ export class MagicInterpreter {
 				throw new Error('API call shoud be a phrase!');
 			}
 
-			if (!call.left || !call.left.token) {
-				throw new Error('Left node of phrase is note defined');
-			}
 
 			if (call.left.kind !== ASTKind.AST_STRING) {
 				api = api.next['input'];
@@ -416,6 +572,10 @@ export class MagicInterpreter {
 			}
 
 			if (call.left.kind === ASTKind.AST_STRING) {
+				if (!call.left.token) {
+					throw new Error('Left node of phrase is note defined');
+				}
+
 				const word = call.left.token.value;
 
 				api = api.next[word];
@@ -600,7 +760,7 @@ export class MagicInterpreter {
 	}
 
 	public getAPIDocs() {
-		const querys = this.getDocsBranch(this.api);
+		const querys = this.getDocsBranch(this.api.querys);
 
 		let docs: JSX.Element[] = [];
 
@@ -650,7 +810,8 @@ export class MagicInterpreter {
 			const node = program.left;
 
 			const api = this.api;
-			const call = this.handleAPICall(api, node);
+
+			const call = this.handleAPICall(api.querys, node);
 
 			return (
 				<div key={key} className="code-output-cell">
