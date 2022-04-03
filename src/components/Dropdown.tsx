@@ -1,8 +1,8 @@
 import React from 'react'
 
+import {getLangId} from '../lib/utils/idioms'
+
 import '../styles/dropdown.scss'
-
-
 
 export const Submenu = ({ opts, setLang }: {
 	opts: string[],
@@ -14,7 +14,7 @@ export const Submenu = ({ opts, setLang }: {
 			{
 				opts.map((l) => (
 					<li key={l} className="nav__submenu-item" onClick={() => { setLang(l) }}>
-						<a>{l}</a>
+						<a>{getLangId(l)}</a>
 					</li>
 
 				))
@@ -33,7 +33,7 @@ export const Dropdown = ({ lang, setLang }: {
 				<li
 					className="nav__menu-item"
 				>
-					<a>Idiom: {lang}</a>
+					<a>Idiom: {getLangId(lang)}</a>
 					<Submenu opts={['pt-BR', 'en-US']} lang={lang} setLang={setLang} />
 				</li>
 			</ul>

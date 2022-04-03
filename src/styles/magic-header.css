@@ -1,8 +1,4 @@
-@font-face {
-  font-family: 'Nunito';
-  src: url('/public/fonts/Nunito-VariableFont_wght.ttf') format("truetype-variations");
-  font-weight: 1 999;
-}
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
 .menu {
 		display: flex;
@@ -13,35 +9,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-	background-color: #D62828;
-	color: white;
+	background-color: #E85A4F;
+	color: #EAE7DC;
 	padding: 0.5em;
 	font-size: 1.5em;
 	margin: 1em;
+	width: 150px;
+	height: 150px;
 }
 
 .magic-logo-text0 {
-	font-family: 'Comfortaa', cursive;
-	background-clip: text;
-	color: white;
-
-	/* background-image: radial-gradient(circle at 30% 107%, #7bdaff 0%, #11edfd 5%, #5f86f3 45%, #6c69f1 60%, #ef15f7 90%); */
-
+		font-family: 'Patrick Hand', cursive;
+		background-clip: text;
+		color: #EAE7DC;
 }
 
 .magic-logo-text1 {
-font-family: 'Comfortaa', cursive;
-}
-
-.magic-logo-beta {
-	/* width: 1em; */
-	/* height: 0.5em; */
-	font-size: 0.5em;
-	font-family: 'Nunito';
-	color: white;
-	margin: 0.5em;
-	padding: 0.2em;
-	background-color: red;
+		font-family: 'Patrick Hand', cursive;
 }
 
 .magic-header {

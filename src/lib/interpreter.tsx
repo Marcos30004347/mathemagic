@@ -614,13 +614,17 @@ export class MagicInterpreter {
 						</div>
 						<div className='docs-description-title'>Description:</div>
 						<div className='docs-brief'>{query.brief}</div>
-						<div className='docs-example-title'>Example:</div>
+						<div className='docs-example'>
+							<div className='docs-example-title'>Example:</div>
 
-						<div className='code-input-container'>
-							<input type="text" className='code-input' value={query.example} onChange={(e) => { e.preventDefault() }} />
-							<button className='code-button'>Submit</button>
+							<div className='docs-example-content'>
+								<div className='code-input-container'>
+									<input type="text" className='code-input' value={query.example} onChange={(e) => { e.preventDefault() }} />
+									<button className='code-button'>Submit</button>
+								</div>
+								<div>{this.compileElement(query.example, 0)}</div>
+							</div>
 						</div>
-						<div>{this.compileElement(query.example, 0)}</div>
 					</div>
 				</div>
 			]);

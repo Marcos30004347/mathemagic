@@ -1,6 +1,4 @@
-/*
-This is the extracted copied part responsible for showing & hiding the submenu.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
 .nav__submenu {
   display: none;
@@ -12,15 +10,8 @@ This is the extracted copied part responsible for showing & hiding the submenu.
   }
 }
 
-/*
-Layout styles.
 
-I like to work on stuff that's good looking so I remixed a cool simple menu by Mike Rojas (thanks!): https://codepen.io/mikerojas87/pen/rojKb
-*/
-
-$color-blue: white;
-$color-blue-dark: white;
-$submenu-width: 250px;
+$submenu-width: 290px;
 
 
 html {
@@ -29,11 +20,6 @@ html {
 
 *, *:before, *:after {
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: 'Open Sans', sans-serif;
 }
 
 .menu-container {
@@ -50,13 +36,13 @@ nav {
 }
 
 .nav {
+	font-family: 'Patrick Hand', cursive;
 
-	font-family: 'Comfortaa', cursive;
 	width: $submenu-width;
 	margin-bottom: 5px;
   text-align: center;
 	padding-top: 15px;
-	background: #D62828;
+	background: #8E8D8A;
 
 	color: white;
 
@@ -73,7 +59,7 @@ nav {
 
 .nav__menu-item {
   &:hover {
-    background-color: #D62828;
+    background-color: #8E8D8A;
 
     .nav__submenu {
       display: block;
@@ -86,7 +72,7 @@ nav {
   text-transform: none;
   position: absolute;
   width: $submenu-width;
-  background-color: #D62828;
+  background-color: #8E8D8A;
 }
 
 .nav__submenu-item {

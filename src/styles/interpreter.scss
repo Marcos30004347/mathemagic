@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
 .interpreter {
 		width: 80%;
 		max-width: 700px;
 }
 
 .code-input {
-		font-family: 'Comfortaa', cursive;
-		height: 2em;
-		width: 80%;
+		font-family: 'Patrick Hand', cursive;
+		height: 60px;
+		width: 75%;
 		font-size: 1em;
 		color: black;
-		border: 2px solid #D62828;
+		border: 2px solid #8E8D8A;
 		padding: 0.5em;
 		margin-bottom: 2em;
 }
@@ -19,15 +21,13 @@
 }
 
 .code-button {
-
-		font-family: 'Comfortaa', cursive;
+		font-family: 'Patrick Hand', cursive;
 		border: 0px;
-		font-size: 1em;
-		width: 20%;
-		height: 2em;
+		font-size: 100%;
+		height: 60px;
 		padding: 0.5em;
 		color: white;
-		background-color: #D62828;
+		background-color: #8E8D8A;
 		text-align: center;
 		float: right;
 }
@@ -46,7 +46,7 @@
 .code-output-header {
 		padding: .5em;
 		color: white;
-		background-color: #D62828;
+		background-color: #8E8D8A;
 }
 
 .code-output-content {
@@ -58,7 +58,7 @@
 
 .code-input-menu {
 		display: flex;
-		margin: 0;
+		margin: 20px;
 		padding: 0;
 		justify-content: space-between;
 }
@@ -70,12 +70,12 @@
 }
 
 .code-input-button {
-		font-family: 'Comfortaa', cursive;
+		font-family: 'Patrick Hand', cursive;
 		border: 0px;
 		font-size: 1em;
 		padding: 0.5em;
 		color: white;
-		background-color: #D62828;
+		background-color: #8E8D8A;
 
 		text-align: center;
 		margin-right: 5px;
@@ -87,12 +87,14 @@
 }
 
 .magic-interpreter {
-		font-family: 'Nunito', sans-serif;
+		font-family: 'Patrick Hand', cursive;
 }
 
 .docs {
-		color: white;
-		border-bottom: 1px solid black;
+		font-family: 'Patrick Hand', cursive;
+		color: #8E8D8A;
+		padding: 10px;
+		margin-bottom: 10px;
 }
 
 .docs-title {
@@ -105,6 +107,11 @@
 }
 
 .docs-query {
+}
+
+.docs-example-content {
+		padding: 30px;
+		border-radius: 5px;
 }
 
 .docs-title {

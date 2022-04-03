@@ -5,8 +5,8 @@ import '../styles/magic-header.css'
 function Logo() {
 	return (
 		<header className="magic-logo">
-			<div className="magic-logo-text0">mathe</div>
-			<div className="magic-logo-text1">magic</div>
+			<div className="magic-logo-text0">MATHE</div>
+			<div className="magic-logo-text1">MAGIC</div>
 		</header>
 	);
 }
