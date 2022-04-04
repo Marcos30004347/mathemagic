@@ -6,13 +6,51 @@
 			"exec": "reduce",
 			"example": "compute 3x + 4x",
 			"output": "{ 0 } = { output }"
-	},
-			{
+		},
+		{
 			"query": "plot { 0 : expression }",
 			"brief": "plot the expression",
 			"exec": "plot",
-			"example": "plot x^2 + 4x",
+			"example": "plot 4x - 3",
 			"output": "{ 0 }"
-	}
+		},
+		{
+			"query": "expand { 0 : expression }",
+			"brief": "expand the expression",
+			"exec": "expand",
+			"example": "expand (x^2 + 4y)(z + 4w)",
+			"output": "{ output }"
+		},
+		{
+			"query": "factors of { 0 : expression }",
+			"brief": "compute the irreductible factorization of a polynomial expression",
+			"exec": "polyFactors",
+			"example": "factors of y^2*x^2 - 9",
+			"output": "{ output }"
+		},
+		{
+			"query": "derivative of { 0 : expression } by { 1 : expression }",
+			"brief": "compute derivatiive of an expression by a variable",
+			"exec": "derivative",
+			"example": "derivative of 4x^2 - 9x + 4 by x",
+			"output": "{ output }"
+		}
+
+	],
+	"functions": [
+		{
+			"name": "sin",
+			"args": [
+				"expression"
+			],
+			"func": "sin"
+		},
+		{
+			"name": "cos",
+			"args": [
+				"expression"
+			],
+			"func": "cos"
+		}
 	]
 }
