@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/magicmath/static/css/main.226ff84f.css",
-    "main.js": "/magicmath/static/js/main.955bfe96.js",
+    "main.css": "/magicmath/static/css/main.230f3c2f.css",
+    "main.js": "/magicmath/static/js/main.76afd118.js",
     "static/js/787.f64bcdca.chunk.js": "/magicmath/static/js/787.f64bcdca.chunk.js",
     "static/media/KaTeX_AMS-Regular.ttf": "/magicmath/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "/magicmath/static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -63,13 +63,16 @@
     "static/media/KaTeX_Size4-Regular.woff2": "/magicmath/static/media/KaTeX_Size4-Regular.e418bf257af1052628d8.woff2",
     "static/media/KaTeX_Size3-Regular.woff": "/magicmath/static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "/magicmath/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
+    "static/media/iconmonstr-github-1.svg": "/magicmath/static/media/iconmonstr-github-1.04be58c17b3d5e9744424d414240dd85.svg",
     "index.html": "/magicmath/index.html",
-    "main.226ff84f.css.map": "/magicmath/static/css/main.226ff84f.css.map",
-    "main.955bfe96.js.map": "/magicmath/static/js/main.955bfe96.js.map",
+    "static/media/search_black_24dp.svg": "/magicmath/static/media/search_black_24dp.6c95e853cf5a1eedd6e285cecedda3a3.svg",
+    "static/media/arrow_drop_down_black_24dp.svg": "/magicmath/static/media/arrow_drop_down_black_24dp.83dc06d8a4267f17bd45db8ae241d442.svg",
+    "main.230f3c2f.css.map": "/magicmath/static/css/main.230f3c2f.css.map",
+    "main.76afd118.js.map": "/magicmath/static/js/main.76afd118.js.map",
     "787.f64bcdca.chunk.js.map": "/magicmath/static/js/787.f64bcdca.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.226ff84f.css",
-    "static/js/main.955bfe96.js"
+    "static/css/main.230f3c2f.css",
+    "static/js/main.76afd118.js"
   ]
 }
