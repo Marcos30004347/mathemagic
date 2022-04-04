@@ -2,7 +2,7 @@
 
 .interpreter {
 		width: 80%;
-		max-width: 800px;
+		max-width: 900px;
 }
 
 .code-input {
@@ -11,15 +11,16 @@
 		overflow: auto;
 		font-size: 25px;
 		color: black;
-		border: 2px solid #8E8D8A;
-		padding: 0.5em;
+		outline: 3px solid #8E8D8A;
 		margin-bottom: 2em;
 		overflow:hidden;
 		resize: none;
+		border-radius: 20px;
+		height: 60px;
+		padding: 0.5em;
 }
 
 .code-input:focus {
-		outline: 0px;
 }
 
 .code-button {
@@ -29,7 +30,6 @@
 		height: 60px;
 		width: 60px;
 		border-radius: 50%;
-		padding: 0.5em;
 		color: white;
 		background-color: #8E8D8A;
 		text-align: center;
@@ -50,12 +50,14 @@
 		background-color: white;
 		margin-bottom: 1em;
 		width: inherit;
+		border-radius: 10px;
 }
 
 .code-output-header {
 		padding: .5em;
 		color: white;
 		background-color: #8E8D8A;
+		border-radius: 10px 10px 0px 0px;
 		font-size: 25px;
 }
 
@@ -83,9 +85,9 @@
 		border: 0px;
 		font-size: 25px;
 		padding: 0.5em;
-		color: #EAE7DC;
-		background-color: #8E8D8A;
-
+		background-color: #EAE7DC;
+		color: #8E8D8A;
+		cursor: pointer;
 		text-align: center;
 		margin-right: 5px;
 		margin-bottom: 5px;

@@ -11,7 +11,6 @@ import search_icon from '../static/search_black_24dp.svg'
 
 import { Dropdown } from './Dropdown'
 
-
 const CodeInput = (args: {
 	idiom: string,
 	setLanguage: React.Dispatch<React.SetStateAction<string>>
@@ -68,7 +67,7 @@ const CodeInput = (args: {
 			return (
 				<div className='code-input-container'>
 					<div>
-						<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder="make a request, something like 'factors of x^2*y^2 - 9', for more examples click on 'docs'!" />
+						<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder="ask something, like 'factors of x^2*y^2 - 9', take a look at 'docs/' for more..." />
 						<button className='code-button' onClick={() => onSubmit()}>
 							<img className='search-icon' src={search_icon} />
 						</button>
@@ -89,8 +88,8 @@ const CodeInput = (args: {
 				isLoading ? <div style={{position: 'fixed', top: '50%', left: '50%'}}><Spinner /></div> : <div>
 					<div className='code-input-menu'>
 						<ul className='code-input-tabs'>
-							<button className={'code-input-button' + (tab === 'query' ? ' selected' : '')} onClick={() => setTab('query')}>query</button>
-							<button className={'code-input-button' + (tab === 'docs' ? ' selected' : '')} onClick={() => setTab('docs')}>docs</button>
+							<button className={'code-input-button' + (tab === 'query' ? ' selected' : '')} onClick={() => setTab('query')}>query/</button>
+							<button className={'code-input-button' + (tab === 'docs' ? ' selected' : '')} onClick={() => setTab('docs')}>docs/</button>
 
 
 						</ul>

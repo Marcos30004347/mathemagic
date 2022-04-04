@@ -15,7 +15,8 @@ $submenu-width: 250px;
 
 .drop-icon {
 		// calculated with https://codepen.io/sosuke/pen/Pjoqqp
-		filter: invert(95%) sepia(12%) saturate(151%) hue-rotate(11deg) brightness(98%) contrast(91%);
+		filter: invert(62%) sepia(9%) saturate(100%) hue-rotate(8deg) brightness(89%) contrast(82%);
+
 }
 
 html {
@@ -46,9 +47,9 @@ nav {
 	margin-bottom: 5px;
   text-align: center;
 	padding-top: 15px;
-	background: #8E8D8A;
+	color: #8E8D8A;
 
-	color: #EAE7DC;
+	background-color: #EAE7DC;
 	font-size: 25px;
 
   a {
@@ -65,7 +66,7 @@ nav {
 
 .nav__menu-item {
   &:hover {
-    background-color: #8E8D8A;
+		background-color: #EAE7DC;
 
     .nav__submenu {
       display: block;
@@ -78,7 +79,8 @@ nav {
   text-transform: none;
   position: absolute;
   width: $submenu-width;
-  background-color: #8E8D8A;
+  color: #8E8D8A;
+	background-color: #EAE7DC;
 }
 
 .nav__submenu-item {
