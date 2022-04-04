@@ -8,5 +8,11 @@
 		padding: 1em;
 }
 
-.social-media-item {
+.social-icon {
+		// calculated with https://codepen.io/sosuke/pen/Pjoqqp
+		filter: invert(56%) sepia(9%) saturate(91%) hue-rotate(7deg) brightness(98%) contrast(91%);
+
+		height: 40px;
+		width: 40px;
+
 }

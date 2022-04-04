@@ -6,13 +6,14 @@
 			"exec": "reduce",
 			"example": "calcular 3x + 4x",
 			"output": "{ 0 } = { output }"
-	},
-			{
+		},
+		{
 			"query": "grafico { 0 : expression }",
 			"brief": "constroi o grafico de uma expressao",
 			"exec": "plot",
 			"example": "grafico x^2 + 4x",
 			"output": "o grafico de { 0 }"
-	}
-	]
+		}
+	],
+	"functions": []
 }

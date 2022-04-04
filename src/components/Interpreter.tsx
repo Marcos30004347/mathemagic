@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from 'react'
 
 import { MagicInterpreter } from '../lib/interpreter'
@@ -5,6 +6,9 @@ import { MagicInterpreter } from '../lib/interpreter'
 import { Spinner } from './Spinner'
 
 import '../styles/interpreter.scss'
+
+import search_icon from '../static/search_black_24dp.svg'
+
 import { Dropdown } from './Dropdown'
 
 
@@ -39,13 +43,19 @@ const CodeInput = (args: {
 		}
 	}, [args.idiom])
 
-	const handleTextArea = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleTextArea = (e: any) => {
+		if(e.nativeEvent.inputType == 'insertLineBreak') {
+			onSubmit();
+
+			return;
+		}
+
+		e.target.style.height = e.target.scrollHeight + 'px';
+
 		setComment(e.target.value);
 	};
 
-	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
+	const onSubmit = () => {
 		const element = parser.current.compileElement(comment, childs.length);
 
 		const c = [element].concat(childs);
@@ -56,13 +66,13 @@ const CodeInput = (args: {
 	const renderContent = (tab: string) => {
 		if (tab === "query") {
 			return (
-				<div>
-					<form className='code-input-container' onSubmit={(e) => onSubmit(e)}>
-						<div>
-							<input className='code-input' type="text" value={comment} onChange={(e) => { handleTextArea(e) }} placeholder="query" />
-							<input type="submit" className='code-button' value="Submit" />
-						</div>
-					</form>
+				<div className='code-input-container'>
+					<div>
+						<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder="make a request, something like 'factors of x^2*y^2 - 9', for more examples click on 'docs'!" />
+						<button className='code-button' onClick={() => onSubmit()}>
+							<img className='search-icon' src={search_icon} />
+						</button>
+					</div>
 					{childs}
 				</div>
 			)
@@ -76,7 +86,7 @@ const CodeInput = (args: {
 	return (
 		<div>
 			{
-				isLoading ? <Spinner /> : <div>
+				isLoading ? <div style={{position: 'fixed', top: '50%', left: '50%'}}><Spinner /></div> : <div>
 					<div className='code-input-menu'>
 						<ul className='code-input-tabs'>
 							<button className={'code-input-button' + (tab === 'query' ? ' selected' : '')} onClick={() => setTab('query')}>query</button>

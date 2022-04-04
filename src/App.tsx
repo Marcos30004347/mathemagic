@@ -23,7 +23,7 @@ function App() {
 				position: 'fixed',
 				bottom: '0px',
 				color: 'white',
-				fontSize: '0.5em',
+				fontSize: '10px',
 				backgroundColor: '#F77F00',
 				padding: '20px',
 				width: '100%',

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { MagicParser, ASTNode, ASTKind } from './parser'
+
+import { Spinner } from '../components/Spinner'
 
 // eslint-disable-next-line
 // @ts-ignore
@@ -15,6 +17,7 @@ import '../styles/interpreter.scss'
 
 import { APIKind, APINode, APIParser } from './api/parser'
 
+import search_icon from '../static/search_black_24dp.svg'
 
 // eslint-disable-next-line
 // @ts-ignore
@@ -69,7 +72,7 @@ type APIFunction = {
 
 type API = {
 	querys: MagicAPINode,
-	functions: {[key: string]: APIFunction }
+	functions: { [key: string]: APIFunction }
 };
 
 function InterpreterError(msg: string) {
@@ -87,18 +90,36 @@ function FunctionPlot(args: {
 		functionPlot({
 			target: "#" + args.id,
 			grid: true,
-			// xAxis: { domain: [args.xAxis.domain.start, args.xAxis.domain.end] },
-			// yAxis: { domain: [args.yAxis.domain.start, args.yAxis.domain.end] },
 			data: [
 				{
 					fn: args.fn,
-					color: "#fc0388"
+					color: "#000000"
 				},
 			]
 		});
 	});
 
 	return <div className="graphic" id={args.id}></div>;
+}
+
+function AsyncContent({ element }: { element: Promise<JSX.Element> }) {
+	const [content, setContent] = useState(<div style={{ marginLeft: '45%' }}><Spinner/></div>);
+
+	useEffect(() => {
+		const resolve = async () => {
+			setContent(await element);
+		}
+
+		resolve();
+	}, [content])
+
+	return (
+		<div>
+			{
+				content
+			}
+		</div>
+	)
 }
 
 
@@ -173,7 +194,7 @@ export class MagicInterpreter {
 
 		this.api.functions = {};
 
-		for(const func of dsc.functions) {
+		for (const func of dsc.functions) {
 			this.api.functions[func.name] = {
 				exec: func.func,
 				args: func.args
@@ -345,18 +366,18 @@ export class MagicInterpreter {
 			return gauss.div(this.scope, this.compileAlgExpression(tree.left), this.compileAlgExpression(tree.right));
 		}
 
-		if(tree.kind == ASTKind.AST_FUNC_CALL) {
-			if(!tree.left || !tree.left.token) throw new Error('Invalid Function name');
-			if(!tree.right) throw new Error('Invalid function arguments');
+		if (tree.kind == ASTKind.AST_FUNC_CALL) {
+			if (!tree.left || !tree.left.token) throw new Error('Invalid Function name');
+			if (!tree.right) throw new Error('Invalid function arguments');
 
 			const name = tree.left.token.value;
 
-			let arg : ASTNode | undefined = tree.right;
+			let arg: ASTNode | undefined = tree.right;
 
-			let args : any[] = [];
+			let args: any[] = [];
 
-			while(arg) {
-				if(!arg.left) throw new Error('Function argument is undefined');
+			while (arg) {
+				if (!arg.left) throw new Error('Function argument is undefined');
 
 				args = args.concat([
 					this.compileAlgExpression(arg.left)
@@ -365,119 +386,128 @@ export class MagicInterpreter {
 				arg = arg.right;
 			}
 
-			if(this.api.functions[name].exec === 'sin') {
-				if(args.length != 1) throw new Error('The sine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'sin') {
+				if (args.length != 1) throw new Error('The sine function expects exactly 1 argument!');
 				return gauss.sin(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'cos') {
-				if(args.length != 1) throw new Error('The cosine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'cos') {
+				if (args.length != 1) throw new Error('The cosine function expects exactly 1 argument!');
 				return gauss.cos(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'tan') {
-				if(args.length != 1) throw new Error('The tangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'tan') {
+				if (args.length != 1) throw new Error('The tangent function expects exactly 1 argument!');
 				return gauss.tan(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'sinh') {
-				if(args.length != 1) throw new Error('The hyperbolic sine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'sinh') {
+				if (args.length != 1) throw new Error('The hyperbolic sine function expects exactly 1 argument!');
 				return gauss.sinh(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'cosh') {
-				if(args.length != 1) throw new Error('The hyperbolic cosine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'cosh') {
+				if (args.length != 1) throw new Error('The hyperbolic cosine function expects exactly 1 argument!');
 				return gauss.cosh(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'tanh') {
-				if(args.length != 1) throw new Error('The hyperbolic tangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'tanh') {
+				if (args.length != 1) throw new Error('The hyperbolic tangent function expects exactly 1 argument!');
 				return gauss.tanh(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'csc') {
-				if(args.length != 1) throw new Error('The cosecant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'csc') {
+				if (args.length != 1) throw new Error('The cosecant function expects exactly 1 argument!');
 				return gauss.csc(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'cot') {
-				if(args.length != 1) throw new Error('The cotangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'cot') {
+				if (args.length != 1) throw new Error('The cotangent function expects exactly 1 argument!');
 				return gauss.cot(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'sec') {
-				if(args.length != 1) throw new Error('The secant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'sec') {
+				if (args.length != 1) throw new Error('The secant function expects exactly 1 argument!');
 				return gauss.sec(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'coth') {
-				if(args.length != 1) throw new Error('The hyperbolic cotangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'coth') {
+				if (args.length != 1) throw new Error('The hyperbolic cotangent function expects exactly 1 argument!');
 				return gauss.coth(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'sech') {
-				if(args.length != 1) throw new Error('The hyperbolic secant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'sech') {
+				if (args.length != 1) throw new Error('The hyperbolic secant function expects exactly 1 argument!');
 				return gauss.sech(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'csch') {
-				if(args.length != 1) throw new Error('The hyperbolic cosecant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'csch') {
+				if (args.length != 1) throw new Error('The hyperbolic cosecant function expects exactly 1 argument!');
 				return gauss.csch(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arccsch') {
-				if(args.length != 1) throw new Error('The inverse hyperbolic cosecant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arccsch') {
+				if (args.length != 1) throw new Error('The inverse hyperbolic cosecant function expects exactly 1 argument!');
 				return gauss.arccsch(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arccsc') {
-				if(args.length != 1) throw new Error('The inverse cosecant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arccsc') {
+				if (args.length != 1) throw new Error('The inverse cosecant function expects exactly 1 argument!');
 				return gauss.arccsc(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arcsech') {
-				if(args.length != 1) throw new Error('The inverse hyperbolic secant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arcsech') {
+				if (args.length != 1) throw new Error('The inverse hyperbolic secant function expects exactly 1 argument!');
 				return gauss.arcsech(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arccosh') {
-				if(args.length != 1) throw new Error('The inverse hyperbolic cosine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arccosh') {
+				if (args.length != 1) throw new Error('The inverse hyperbolic cosine function expects exactly 1 argument!');
 				return gauss.arccosh(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arctanh') {
-				if(args.length != 1) throw new Error('The inverse hyperbolic tanhent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arctanh') {
+				if (args.length != 1) throw new Error('The inverse hyperbolic tanhent function expects exactly 1 argument!');
 				return gauss.arccosh(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arcsec') {
-				if(args.length != 1) throw new Error('The inverse secant function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arcsec') {
+				if (args.length != 1) throw new Error('The inverse secant function expects exactly 1 argument!');
 				return gauss.arcsec(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arccot') {
-				if(args.length != 1) throw new Error('The inverse cotangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arccot') {
+				if (args.length != 1) throw new Error('The inverse cotangent function expects exactly 1 argument!');
 				return gauss.arccot(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arccos') {
-				if(args.length != 1) throw new Error('The inverse cosine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arccos') {
+				if (args.length != 1) throw new Error('The inverse cosine function expects exactly 1 argument!');
 				return gauss.arccos(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arcsin') {
-				if(args.length != 1) throw new Error('The inverse sine function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arcsin') {
+				if (args.length != 1) throw new Error('The inverse sine function expects exactly 1 argument!');
 				return gauss.arcsin(this.scope, args[0]);
 			}
 
-			if(this.api.functions[name].exec === 'arctan') {
-				if(args.length != 1) throw new Error('The inverse tangent function expects exactly 1 argument!');
+			if (this.api.functions[name].exec === 'arctan') {
+				if (args.length != 1) throw new Error('The inverse tangent function expects exactly 1 argument!');
 				return gauss.arctan(this.scope, args[0]);
+			}
+
+			if (this.api.functions[name].exec === 'sqrt') {
+				if (args.length != 1) throw new Error('The square root function expects exactly 1 argument!');
+				return gauss.sqrt(this.scope, args[0]);
+			}
+
+			if (this.api.functions[name].exec === 'root') {
+				if (args.length != 2) throw new Error('The root function expects exactly 1 argument!');
+				return gauss.root(this.scope, args[0], args[1]);
 			}
 
 			throw new Error("Function '" + name + "' is not defined on the API");
 		}
-
 
 		return InterpreterError('tree is not a valid expression');
 	}
@@ -506,11 +536,10 @@ export class MagicInterpreter {
 
 
 	private handleAPICall(api: MagicAPINode, call?: ASTNode) {
-		console.log(call)
-		console.log("ahahahah")
 		if (!call) {
 			throw new Error('call tree not defined');
 		}
+
 		// TODO: change any to GaussExpr type when that
 		// gets implemented
 		const args: {
@@ -522,8 +551,7 @@ export class MagicInterpreter {
 			}
 		} = {};
 
-
-		while (api.kind != "query") {
+		while (api && api.kind != "query") {
 			if (!call) {
 				if (!api.next['query']) {
 					throw new Error('query is not defined');
@@ -541,10 +569,6 @@ export class MagicInterpreter {
 
 			if (call.left.kind !== ASTKind.AST_STRING) {
 				api = api.next['input'];
-
-				if (api.kind === 'query') {
-					break;
-				}
 
 				if (api.kind != 'input') {
 					throw new Error('Expecting an input!');
@@ -578,13 +602,38 @@ export class MagicInterpreter {
 
 				const word = call.left.token.value;
 
-				api = api.next[word];
+				const n = api.next[word];
 
-				if (api.kind === 'query') {
-					break;
+				if(n === undefined) {
+					api = api.next['input'];
+
+					if(api === undefined) {
+						throw new Error('Invalid Query');
+					}
+
+					if (api.kind != 'input') {
+						throw new Error('Expecting an input!');
+					}
+
+					if (api.type === "expression") {
+						args[api.key] = { expr: this.compileExpression(call.left)[0], type: "expression" };
+					}
+
+					if (api.type === "string") {
+						if (!call.left || !call.left.token) {
+							throw new Error('Left node of phrase is note defined');
+						}
+
+						args[api.key] = { str: call.left.token.value, type: "string" };
+					}
+				} else {
+					api = n;
+
+					if (api.kind === 'query') {
+						break;
+					}
 				}
 			}
-
 			call = call.right;
 		}
 
@@ -675,39 +724,121 @@ export class MagicInterpreter {
 		return out;
 	}
 
-	private executeHandler(key: number, { query, args }: { query: MagicAPINode, args: { [key: number]: { type: string, int?: number, str?: string, expr?: any } } }): JSX.Element {
-		if (!this.scope) {
-			throw new Error("Interpreter not initialized!");
-		}
+	private async executeHandler(key: number, { query, args }: { query: MagicAPINode, args: { [key: number]: { type: string, int?: number, str?: string, expr?: any } } }): Promise<JSX.Element> {
+		return new Promise((resolve) => {
+			if (!this.scope) {
+				throw new Error("Interpreter not initialized!");
+			}
 
-		if (query.kind != "query") {
-			throw new Error("query should be of 'query' kind!");
-		}
+			if (query.kind != "query") {
+				throw new Error("query should be of 'query' kind!");
+			}
 
-		if (query.exec === "reduce") {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			const expr = gauss.reduce(this.scope, args[0].expr);
+			if (query.exec === "reduce") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.reduce(this.scope, args[0].expr);
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			return parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output)));
-		}
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
 
-		if (query.exec === "plot") {
-			return (
-				<div>
-					{parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(args[0].expr), query.output)))}
-					<FunctionPlot
-						id={'function-plot-' + key}
-						fn={gauss.toString(args[0].expr)}
-					/>
-				</div>
-			)
-			//console.log(gauss.toString(args[0].expr))
-		}
+			if (query.exec === "expand") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.expand(this.scope, args[0].expr);
 
-		throw new Error("Execute not implemented for '" + query.exec + "'!");
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyRoots") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialRoots(this.scope, args[0].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyFactors") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialFactors(this.scope, args[0].expr);
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyResultant") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialResultant(this.scope, args[0].expr, args[1].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyDiv") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialDiv(this.scope, args[0].expr, args[1].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyGDC") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialDiv(this.scope, args[0].expr, args[1].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "polyLCM") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.polynomialDiv(this.scope, args[0].expr, args[1].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+			if (query.exec === "derivative") {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const expr = gauss.derivative(this.scope, args[0].expr, args[1].expr);
+
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				resolve(parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(expr), query.output))));
+			}
+
+
+			if (query.exec === "plot") {
+				resolve(
+					<div>
+						{parse(katex.renderToString(this.formatOutput(args, gauss.toLatex(args[0].expr), query.output)))}
+						<FunctionPlot
+							id={'function-plot-' + key}
+							fn={gauss.toString(args[0].expr)}
+						/>
+					</div>
+				)
+				//console.log(gauss.toString(args[0].expr))
+			}
+
+			throw new Error("Execute not implemented for '" + query.exec + "'!");
+		});
 	}
 
 	private getDocsBranch(api: MagicAPINode): {
@@ -779,8 +910,11 @@ export class MagicInterpreter {
 
 							<div className='docs-example-content'>
 								<div className='code-input-container'>
-									<input type="text" className='code-input' value={query.example} onChange={(e) => { e.preventDefault() }} />
-									<button className='code-button'>Submit</button>
+
+									<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
+									<button className='code-button' onClick={(e) => e.preventDefault()}>
+										<img className='search-icon' src={search_icon} />
+									</button>
 								</div>
 								<div>{this.compileElement(query.example, 0)}</div>
 							</div>
@@ -810,7 +944,6 @@ export class MagicInterpreter {
 			const node = program.left;
 
 			const api = this.api;
-
 			const call = this.handleAPICall(api.querys, node);
 
 			return (
@@ -819,9 +952,15 @@ export class MagicInterpreter {
 						{src}
 					</div>
 					<div className='code-output-content'>
-						{
-							this.executeHandler(key, call)
-						}
+						<AsyncContent element={
+							new Promise((resolve) => {
+								this.executeHandler(key, call).then(
+									(content) => {
+										resolve(content)
+									}
+								)
+							})
+						} />
 					</div>
 				</div>
 			);
@@ -842,7 +981,6 @@ export class MagicInterpreter {
 					</div>
 				</div>
 			);
-
 		}
 	}
 

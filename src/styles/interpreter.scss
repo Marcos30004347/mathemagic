@@ -2,18 +2,20 @@
 
 .interpreter {
 		width: 80%;
-		max-width: 700px;
+		max-width: 800px;
 }
 
 .code-input {
 		font-family: 'Patrick Hand', cursive;
-		height: 60px;
-		width: 75%;
-		font-size: 1em;
+		width: 90%;
+		overflow: auto;
+		font-size: 25px;
 		color: black;
 		border: 2px solid #8E8D8A;
 		padding: 0.5em;
 		margin-bottom: 2em;
+		overflow:hidden;
+		resize: none;
 }
 
 .code-input:focus {
@@ -23,13 +25,20 @@
 .code-button {
 		font-family: 'Patrick Hand', cursive;
 		border: 0px;
-		font-size: 100%;
+		font-size: 15px;
 		height: 60px;
+		width: 60px;
+		border-radius: 50%;
 		padding: 0.5em;
 		color: white;
 		background-color: #8E8D8A;
 		text-align: center;
 		float: right;
+    cursor: pointer;
+}
+.search-icon {
+		// calculated with https://codepen.io/sosuke/pen/Pjoqqp
+		filter: invert(95%) sepia(12%) saturate(151%) hue-rotate(11deg) brightness(98%) contrast(91%);
 }
 
 .code-input-container {
@@ -47,6 +56,7 @@
 		padding: .5em;
 		color: white;
 		background-color: #8E8D8A;
+		font-size: 25px;
 }
 
 .code-output-content {
@@ -60,7 +70,6 @@
 		display: flex;
 		margin: 20px;
 		padding: 0;
-		justify-content: space-between;
 }
 
 .code-input-tabs {
@@ -72,9 +81,9 @@
 .code-input-button {
 		font-family: 'Patrick Hand', cursive;
 		border: 0px;
-		font-size: 1em;
+		font-size: 25px;
 		padding: 0.5em;
-		color: white;
+		color: #EAE7DC;
 		background-color: #8E8D8A;
 
 		text-align: center;
@@ -95,6 +104,7 @@
 		color: #8E8D8A;
 		padding: 10px;
 		margin-bottom: 10px;
+		font-size: 25px;
 }
 
 .docs-title {
@@ -110,24 +120,22 @@
 }
 
 .docs-example-content {
-		padding: 30px;
-		border-radius: 5px;
 }
 
 .docs-title {
-		font-size: 1.3em;
+		font-size: 35px;
 		margin-top: 1em;
 }
 
 .docs-description-title {
-		font-size: 1em;
+		font-size: 25px;
 		margin-top: 1em;
 		margin-bottom: 0.5em;
 		font-weight: bold;
 }
 
 .docs-example-title {
-		font-size: 1em;
+		font-size: 25px;
 		margin-top: 1em;
 		margin-bottom: 1.5em;
 		font-weight: bold;

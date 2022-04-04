@@ -11,8 +11,12 @@
 }
 
 
-$submenu-width: 290px;
+$submenu-width: 250px;
 
+.drop-icon {
+		// calculated with https://codepen.io/sosuke/pen/Pjoqqp
+		filter: invert(95%) sepia(12%) saturate(151%) hue-rotate(11deg) brightness(98%) contrast(91%);
+}
 
 html {
   box-sizing: border-box;
@@ -44,9 +48,11 @@ nav {
 	padding-top: 15px;
 	background: #8E8D8A;
 
-	color: white;
+	color: #EAE7DC;
+	font-size: 25px;
 
   a {
+		font-size: 25px;
     padding: 0 16px;
     line-height: inherit;
     cursor: pointer;
@@ -68,7 +74,7 @@ nav {
 }
 
 .nav__submenu {
-  font-weight: 300;
+	font-size: 25px;
   text-transform: none;
   position: absolute;
   width: $submenu-width;

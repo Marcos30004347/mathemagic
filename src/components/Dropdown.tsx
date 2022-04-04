@@ -4,6 +4,8 @@ import {getLangId} from '../lib/utils/idioms'
 
 import '../styles/dropdown.scss'
 
+import drop_icon from '../static/arrow_drop_down_black_24dp.svg'
+
 export const Submenu = ({ opts, setLang }: {
 	opts: string[],
 	lang: string,
@@ -14,7 +16,9 @@ export const Submenu = ({ opts, setLang }: {
 			{
 				opts.map((l) => (
 					<li key={l} className="nav__submenu-item" onClick={() => { setLang(l) }}>
-						<a>{getLangId(l)}</a>
+						<a>
+							{getLangId(l)}
+						</a>
 					</li>
 
 				))
@@ -33,7 +37,10 @@ export const Dropdown = ({ lang, setLang }: {
 				<li
 					className="nav__menu-item"
 				>
-					<a>Idiom: {getLangId(lang)}</a>
+					<a>
+						{ getLangId(lang)}
+						<img className='drop-icon' src={drop_icon} />
+					</a>
 					<Submenu opts={['pt-BR', 'en-US']} lang={lang} setLang={setLang} />
 				</li>
 			</ul>
