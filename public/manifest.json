@@ -1,9 +1,9 @@
 {
-  "short_name": "Mathemagic",
+	"short_name": "Mathemagic",
 	"name": "Magic web app for mathemathics",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+	"icons": [],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "#ffffff"
 }
