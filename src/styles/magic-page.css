@@ -5,10 +5,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+	height: 100%;
 }
 
 body {
-		height: 100vh;
+		height: 100%;
 		background-color: #EAE7DC;
 }
 

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react'
 
+import { Link } from 'react-router-dom'
+
 import { MagicParser, ASTNode, ASTKind } from './parser'
 
 import { Spinner } from '../components/Spinner'
@@ -664,7 +666,7 @@ export class MagicInterpreter {
 					throw new Error('Token is not defined for node!');
 				}
 
-				out += (out.length > 0 ? " \\space " : "") + node.token.value;
+				out += (out.length > 0 ? " \\space " : "") + "\\text{" + node.token.value + "}";
 			}
 
 			if (node.kind === APIKind.API_TEMPLATE) {
@@ -709,7 +711,7 @@ export class MagicInterpreter {
 							throw new Error('str is undefined');
 						}
 
-						out += (out.length > 0 ? " \\space " : "") + arg.str;
+						out += (out.length > 0 ? " \\space " : "") + "\\text{" + arg.str + "}";
 					}
 				}
 
@@ -912,9 +914,9 @@ export class MagicInterpreter {
 								<div className='code-input-container'>
 
 									<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
-									<button className='code-button' onClick={(e) => e.preventDefault()}>
+									<Link className='code-button' to={"/query?query=" + encodeURIComponent(query.example)}>
 										<img className='search-icon' src={search_icon} />
-									</button>
+									</Link>
 								</div>
 								<div>{this.compileElement(query.example, 0)}</div>
 							</div>
@@ -949,7 +951,7 @@ export class MagicInterpreter {
 			return (
 				<div key={key} className="code-output-cell">
 					<div className='code-output-header'>
-						{src}
+						<div className='code-output-title'>{src}:</div>
 					</div>
 					<div className='code-output-content'>
 						<AsyncContent element={
@@ -969,7 +971,7 @@ export class MagicInterpreter {
 			return (
 				<div key={key} className="code-output-cell">
 					<div className='code-output-header'>
-						{src}
+						<div className='code-output-title'>{src}:</div>
 					</div>
 					<div className='code-output-content'>
 						<div>

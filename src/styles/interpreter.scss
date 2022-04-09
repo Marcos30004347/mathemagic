@@ -2,6 +2,7 @@
 
 .interpreter {
 		width: 80%;
+		padding-bottom: 50px;
 		max-width: 900px;
 }
 
@@ -10,12 +11,13 @@
 		width: 90%;
 		overflow: auto;
 		font-size: 25px;
+		border: 0px;
 		color: black;
 		outline: 3px solid #8E8D8A;
 		margin-bottom: 2em;
 		overflow:hidden;
 		resize: none;
-		border-radius: 20px;
+		border-radius: 10px;
 		height: 60px;
 		padding: 0.5em;
 }
@@ -30,13 +32,21 @@
 		height: 60px;
 		width: 60px;
 		border-radius: 50%;
-		color: white;
+		color: #EAE7DC;
 		background-color: #8E8D8A;
 		text-align: center;
 		float: right;
     cursor: pointer;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
 }
+
 .search-icon {
+		display: block;
+		margin: auto;
+
 		// calculated with https://codepen.io/sosuke/pen/Pjoqqp
 		filter: invert(95%) sepia(12%) saturate(151%) hue-rotate(11deg) brightness(98%) contrast(91%);
 }
@@ -47,30 +57,57 @@
 }
 
 .code-output-cell {
-		background-color: white;
+		//background-color: white;
 		margin-bottom: 1em;
 		width: inherit;
 		border-radius: 10px;
 }
 
 .code-output-header {
-		padding: .5em;
-		color: white;
-		background-color: #8E8D8A;
+		font-family: 'Patrick Hand', cursive;
 		border-radius: 10px 10px 0px 0px;
 		font-size: 25px;
 }
 
+.code-output-title {
+		text-align: center;
+		display: inline-block;
+		//background-color: #8E8D8A;
+		//color: #EAE7DC;
+		color: #8e8d8a;
+		margin-left: 10px;
+		padding-top: 2px;
+		padding-bottom: 2px;
+		padding-right: 10px;
+		padding-left: 10px;
+		border-bottom: 3px solid #8e8d8a;
+		border-radius: 5px 5px 0px 0px;
+}
+
+.about {
+		font-family: 'Patrick Hand', cursive;
+		color: #8E8D8A;
+}
+
+.about-title {
+		font-weight: bold;
+		font-size: 40px;
+}
+
 .code-output-content {
+		background-color: white;
 		padding: 1em;
 		color: black;
 		overflow: auto;
 		width: inherit;
+		border: 3px solid #8e8d8a;
+		border-radius: 10px;
 }
 
 .code-input-menu {
 		display: flex;
-		margin: 20px;
+		margin-bottom: 20px;
+		margin-right: 40px;
 		padding: 0;
 }
 
@@ -84,13 +121,12 @@
 		font-family: 'Patrick Hand', cursive;
 		border: 0px;
 		font-size: 25px;
-		padding: 0.5em;
 		background-color: #EAE7DC;
+		padding: 0.5em;
 		color: #8E8D8A;
 		cursor: pointer;
 		text-align: center;
-		margin-right: 5px;
-		margin-bottom: 5px;
+		text-decoration:none;
 }
 
 .code-input-button.selected {

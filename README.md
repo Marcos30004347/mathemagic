@@ -2,7 +2,7 @@
 
 This is an open source application for symbolic mathematic, the app aims to be intuitive, easy to use, and be multi-cultural.
 
-You can use the app on https://marcos30004347.github.io/magicmath/
+You can use the app on https://marcos30004347.github.io/mathemagic/
 
 ## Multicultural
 Users are able to use any supported language to make math querys inside the app, the default language will be whatever language is defined on the browser but the user can switch to any language registered on the app. This makes the app a good fit for young students that does not lives on a country that speaks english nativelly or at least does not feel confortable with the language yet.
