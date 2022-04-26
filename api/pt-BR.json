@@ -4,16 +4,66 @@
 			"query": "calcular { 0 : expression }",
 			"brief": "calcula a forma minima de uma expressao",
 			"exec": "reduce",
-			"example": "calcular 3x + 4x",
+			"example": "calcular sen(x) + 3x + 4x + sen(x)",
+			"output": "{ 0 } = { output }"
+		},
+		{
+			"query": "{ 0 : expression }",
+			"brief": "calcula a forma minima de uma expressao",
+			"exec": "reduce",
+			"example": "3x + 4x + 3^70",
 			"output": "{ 0 } = { output }"
 		},
 		{
 			"query": "grafico { 0 : expression }",
-			"brief": "constroi o grafico de uma expressao",
+			"brief": "constroi o grafico de uma expressão",
 			"exec": "plot",
 			"example": "grafico x^2 + 4x",
 			"output": "o grafico de { 0 }"
+		},
+		{
+			"query": "expandir { 0 : expression }",
+			"brief": "expande uma expressão",
+			"exec": "expand",
+			"example": "expandir (x^2 + 4y)(z + 4w)",
+			"output": "{ output }"
+		},
+		{
+			"query": "fatores de { 0 : expression }",
+			"brief": "calcula todos os fatores de uma expressão polynomial",
+			"exec": "polyFactors",
+			"example": "fatores de y^2*x^2 - 9",
+			"output": "{ output }"
+		},
+		{
+			"query": "derivada de { 0 : expression } em { 1 : expression }",
+			"brief": "calcula a derivada de uma expressão",
+			"exec": "derivative",
+			"example": "derivada de 4x^2 - 9x + 4 em x",
+			"output": "{ output }"
 		}
 	],
-	"functions": []
+	"functions": [
+		{
+			"name": "sen",
+			"args": [
+				"expression"
+			],
+			"func": "sin"
+		},
+		{
+			"name": "cos",
+			"args": [
+				"expression"
+			],
+			"func": "cos"
+		},
+		{
+			"name": "tan",
+			"args": [
+				"expression"
+			],
+			"func": "tan"
+		}
+	]
 }
