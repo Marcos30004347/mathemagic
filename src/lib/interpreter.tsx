@@ -132,11 +132,9 @@ export class MagicInterpreter {
 
 	scope: gauss.Scope | null;
 
-	docs: JSX.Element[] | undefined;
 
 	constructor() {
 		this.culture = "en-US";
-		this.docs = undefined;
 
 		this.api = {
 			querys: {
@@ -184,7 +182,6 @@ export class MagicInterpreter {
 
 		this.scope = gauss.scopeCreate();
 
-		this.docs = undefined;
 	}
 
 	public stop() {
@@ -564,8 +561,6 @@ export class MagicInterpreter {
 			throw new Error('call tree not defined');
 		}
 
-		console.log(call);
-
 		// TODO: change any to GaussExpr type when that
 		// gets implemented
 		const args: {
@@ -929,45 +924,40 @@ export class MagicInterpreter {
 	}
 
 	public getAPIDocs() {
-		if(!this.docs) {
-			const querys = this.getDocsBranch(this.api.querys);
+		const querys = this.getDocsBranch(this.api.querys);
 
-			let docs: JSX.Element[] = [];
+		let docs: JSX.Element[] = [];
 
-			for (const query of querys) {
-				docs = docs.concat([
-					<div className='docs' key={docs.length}>
-						<div>
-							<div className='docs-title'>
-								<div className='docs-query'><span className='docs-query-word'>Query:</span> {query.query}</div>
-							</div>
-							<div className='docs-description-title'>Description:</div>
-							<div className='docs-brief'>{query.brief}</div>
-							<div className='docs-example'>
-								<div className='docs-example-title'>Example:</div>
+		for (const query of querys) {
+			docs = docs.concat([
+				<div className='docs' key={docs.length}>
+					<div>
+						<div className='docs-title'>
+							<div className='docs-query'><span className='docs-query-word'>Query:</span> {query.query}</div>
+						</div>
+						<div className='docs-description-title'>Description:</div>
+						<div className='docs-brief'>{query.brief}</div>
+						<div className='docs-example'>
+							<div className='docs-example-title'>Example:</div>
 
-								<div className='docs-example-content'>
-									<div className='code-input-container'>
+							<div className='docs-example-content'>
+								<div className='code-input-container'>
 
-										<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
-										<Link className='code-button' to={"/query?query=" + encodeURIComponent(query.example)}>
-											<img className='search-icon' src={search_icon} />
-										</Link>
-									</div>
-									<div>{this.compileElement(query.example, 0)}</div>
+									<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
+									<Link className='code-button' to={"/query?query=" + encodeURIComponent(query.example)+"&lang="+this.culture}>
+										<img className='search-icon' src={search_icon} />
+									</Link>
 								</div>
+								<div>{this.compileElement(query.example, 0)}</div>
 							</div>
 						</div>
 					</div>
-				]);
-			}
-
-			this.docs = docs;
-
-			return this.docs;
+				</div>
+			]);
 		}
 
-		return this.docs;
+
+		return docs;
 	}
 
 	public compileElement(src: string, key: number): JSX.Element {

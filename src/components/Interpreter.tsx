@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from 'react'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 import { MagicInterpreter } from '../lib/interpreter'
 
@@ -30,10 +30,34 @@ function getQueryFromSearch(search: string) {
 	return '';
 }
 
-export const Interpreter = (args: {
-	language: string,
-	setLanguage: React.Dispatch<React.SetStateAction<string>>
-}) => {
+function getLangFromSearch(search: string | undefined) {
+	if(!search || search.length == 0) return navigator.language;
+
+	const query = search.substring(1);
+	const vars = query.split('&');
+
+	for (let i = 0; i < vars.length; i++) {
+		const pair = vars[i].split('=');
+
+		if (decodeURIComponent(pair[0]) == 'lang') {
+			return decodeURIComponent(pair[1]);
+		}
+	}
+
+	return navigator.language;
+}
+
+
+export const Interpreter = () => {
+
+	const location = useLocation();
+
+	const [language, setLanguageString] = useState(getLangFromSearch(location.search));
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const navigate = useNavigate();
 
 	const [childs, setChilds] = useState([<div key={0}></div>]);
 
@@ -41,10 +65,21 @@ export const Interpreter = (args: {
 
 	const [isLoading, setLoading] = useState(true);
 
-	const navigate = useNavigate();
-	const location = useLocation();
-
 	const parser = useRef(new MagicInterpreter());
+
+	const [docs, setDocs] = useState([<div key={0}></div>])
+
+	const setLanguage = (idiom: string) => {
+		setLanguageString(idiom);
+
+		setChilds([<div key={0}></div>]);
+
+		setComment('');
+
+		setSearchParams('');
+
+		return idiom;
+	}
 
 	const compileAndAppend = (query: string) => {
 		const element = parser.current.compileElement(query, childs.length);
@@ -59,22 +94,33 @@ export const Interpreter = (args: {
 	}
 
 	useEffect(() => {
+		if(location.pathname == "/") {
+			navigate("query");
+		}
+	}, []);
+
+
+	useEffect(() => {
 		setLoading(true);
 
 		if(location.pathname == "/") {
 			navigate("query");
 		}
+
 		const init = async () => {
-			await parser.current.init(args.language);
+			await parser.current.init(language);
+
+			setDocs(parser.current.getAPIDocs());
 
 			setLoading(false);
 
-			if(location.search.length > 0) {
-				const query = getQueryFromSearch(location.search);
+			// if(location.search.length > 0) {
+			// 	const query = getQueryFromSearch(location.search);
 
-				setComment(query);
-				compileAndAppend(query);
-			}
+			// 	setComment(query);
+
+			// 	compileAndAppend(query);
+			// }
 		}
 
 		init();
@@ -82,7 +128,22 @@ export const Interpreter = (args: {
 		return () => {
 			parser.current.stop();
 		}
-	}, [args.language, location.search])
+	}, [language]);
+
+	useEffect(() => {
+
+		if(location.search.length > 0) {
+			const query = getQueryFromSearch(location.search);
+			const lang = getLangFromSearch(location.search);
+
+			setLanguage(lang);
+
+			setComment(query);
+
+			compileAndAppend(query);
+		}
+
+	}, [location.search]);
 
 	const handleTextArea = (e: any) => {
 		if(e.nativeEvent.inputType == 'insertLineBreak') {
@@ -91,12 +152,10 @@ export const Interpreter = (args: {
 		}
 
 		e.target.style.height = e.target.scrollHeight + 'px';
-
 		setComment(e.target.value);
 	};
 
 	const pickPlaceholder = (lang : string) => {
-		console.log(lang)
 		if(lang == "en-US") return "What questions do you have? you can take a look at 'docs/' to see examples..."
 		if(lang == "pt-BR") return "O que você quer saber? você pode olhar a aba 'docs/' para ver alguns exemplos..."
 
@@ -107,7 +166,7 @@ export const Interpreter = (args: {
 		return (
 			<div className='code-input-container'>
 				<div>
-					<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder={pickPlaceholder(args.language)} />
+					<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder={pickPlaceholder(language)} />
 					<button className='code-button' onClick={() => submit()}>
 						<img className='search-icon' src={search_icon} />
 					</button>
@@ -119,7 +178,7 @@ export const Interpreter = (args: {
 	}
 
 	const renderDocs = () => {
-		return parser.current.getAPIDocs();
+		return docs;
 	}
 
 	const renderAbout = () => {
@@ -151,7 +210,7 @@ export const Interpreter = (args: {
 							</ul>
 						</nav>
 						<div style={{marginRight: '50px'}}>
-							<Dropdown lang={args.language} setLang={args.setLanguage} />
+							<Dropdown lang={language} setLang={setLanguage} />
 						</div>
 					</div>
 					<Routes>

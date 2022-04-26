@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 
 import { Header } from './components/Header'
 
@@ -11,13 +10,12 @@ import 'katex/dist/katex.min.css';
 
 import './styles/magic-page.css'
 
-function App() {
-	const [language, setLanguage] = useState(navigator.language);
 
+function App() {
 	return (
 		<div className='magic-app'>
 			<Header/>
-			<Interpreter language={language} setLanguage={setLanguage}/>
+			<Interpreter/>
 			<SocialMedia/>
 			<div style={{
 				position: 'fixed',

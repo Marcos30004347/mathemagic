@@ -9,7 +9,7 @@ import drop_icon from '../static/arrow_drop_down_black_24dp.svg'
 export const Submenu = ({ opts, setLang }: {
 	opts: string[],
 	lang: string,
-	setLang: React.Dispatch<React.SetStateAction<string>>
+	setLang: (idiom: string) => string
 }) => {
 	return (
 		<ul className="nav__submenu">
@@ -29,7 +29,7 @@ export const Submenu = ({ opts, setLang }: {
 
 export const Dropdown = ({ lang, setLang }: {
 	lang: string,
-	setLang: React.Dispatch<React.SetStateAction<string>>
+	setLang: (idiom: string) => string
 }) => {
 	return (
 		<nav className="nav">
