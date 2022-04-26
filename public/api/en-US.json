@@ -4,7 +4,14 @@
 			"query": "compute { 0 : expression }",
 			"brief": "compute the minimal form of an expression",
 			"exec": "reduce",
-			"example": "compute 3x + 4x",
+			"example": "compute sin(x) + 3x + 4x + sin(x)",
+			"output": "{ 0 } = { output }"
+		},
+		{
+			"query": "{ 0 : expression }",
+			"brief": "compute the minimal form of an expression",
+			"exec": "reduce",
+			"example": "3x + 4x + 3^70",
 			"output": "{ 0 } = { output }"
 		},
 		{
@@ -35,7 +42,6 @@
 			"example": "derivative of 4x^2 - 9x + 4 by x",
 			"output": "{ output }"
 		}
-
 	],
 	"functions": [
 		{
@@ -51,6 +57,13 @@
 				"expression"
 			],
 			"func": "cos"
+		},
+		{
+			"name": "tan",
+			"args": [
+				"expression"
+			],
+			"func": "tan"
 		}
 	]
 }

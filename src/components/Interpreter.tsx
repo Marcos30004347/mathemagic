@@ -44,7 +44,6 @@ export const Interpreter = (args: {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-
 	const parser = useRef(new MagicInterpreter());
 
 	const compileAndAppend = (query: string) => {
@@ -96,11 +95,19 @@ export const Interpreter = (args: {
 		setComment(e.target.value);
 	};
 
+	const pickPlaceholder = (lang : string) => {
+		console.log(lang)
+		if(lang == "en-US") return "What questions do you have? you can take a look at 'docs/' to see examples..."
+		if(lang == "pt-BR") return "O que você quer saber? você pode olhar a aba 'docs/' para ver alguns exemplos..."
+
+		return "What question do you have? take a look at docs/ for examples..."
+	}
+
 	const renderQuery = () => {
 		return (
 			<div className='code-input-container'>
 				<div>
-					<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder="ask something, like 'factors of x^2*y^2 - 9', take a look at 'docs/' for more..." />
+					<textarea className='code-input' value={comment} onChange={(e) => { handleTextArea(e) }} placeholder={pickPlaceholder(args.language)} />
 					<button className='code-button' onClick={() => submit()}>
 						<img className='search-icon' src={search_icon} />
 					</button>

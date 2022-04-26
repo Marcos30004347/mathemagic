@@ -132,8 +132,11 @@ export class MagicInterpreter {
 
 	scope: gauss.Scope | null;
 
+	docs: JSX.Element[] | undefined;
+
 	constructor() {
 		this.culture = "en-US";
+		this.docs = undefined;
 
 		this.api = {
 			querys: {
@@ -180,6 +183,8 @@ export class MagicInterpreter {
 		await gauss.init();
 
 		this.scope = gauss.scopeCreate();
+
+		this.docs = undefined;
 	}
 
 	public stop() {
@@ -215,8 +220,16 @@ export class MagicInterpreter {
 
 				const curr = node.left;
 
+				if(!api.kind) {
+					throw new Error("the query is not valid!");
+				}
+
 				if (api.kind === "query") {
 					throw new Error('something went wrong!');
+				}
+
+				if(!curr.kind) {
+					throw new Error("the query is not valid");
 				}
 
 				if (curr.kind === APIKind.API_TEMPLATE) {
@@ -278,6 +291,10 @@ export class MagicInterpreter {
 				node = node.right;
 			}
 
+			if(!api.kind) {
+				throw new Error("the query is not valid!");
+			}
+
 			if (api.kind === "query") {
 				throw new Error("query node shouldn't be registered at this point");
 			}
@@ -302,6 +319,11 @@ export class MagicInterpreter {
 		if (this.scope === null) {
 			return InterpreterError('scope not initialized');
 		}
+
+		if(!tree.kind) {
+			throw new Error("the query is not valid!");
+		}
+
 		if (tree.kind == ASTKind.AST_NUMBER) {
 			return gauss.numberFromDouble(this.scope, Number(tree.token?.value));
 		}
@@ -542,6 +564,8 @@ export class MagicInterpreter {
 			throw new Error('call tree not defined');
 		}
 
+		console.log(call);
+
 		// TODO: change any to GaussExpr type when that
 		// gets implemented
 		const args: {
@@ -571,6 +595,10 @@ export class MagicInterpreter {
 
 			if (call.left.kind !== ASTKind.AST_STRING) {
 				api = api.next['input'];
+
+				if(!api || !api.kind) {
+					throw new Error("invalid query!");
+				}
 
 				if (api.kind != 'input') {
 					throw new Error('Expecting an input!');
@@ -661,6 +689,10 @@ export class MagicInterpreter {
 				throw new Error('Left node is undefined');
 			}
 
+			if(!node.kind) {
+				throw new Error("the query is not valid!");
+			}
+
 			if (node.kind === APIKind.API_STRING_LITERAL) {
 				if (!node.token) {
 					throw new Error('Token is not defined for node!');
@@ -730,6 +762,10 @@ export class MagicInterpreter {
 		return new Promise((resolve) => {
 			if (!this.scope) {
 				throw new Error("Interpreter not initialized!");
+			}
+
+			if(!query.kind) {
+				throw new Error("the query is not valid!");
 			}
 
 			if (query.kind != "query") {
@@ -893,40 +929,45 @@ export class MagicInterpreter {
 	}
 
 	public getAPIDocs() {
-		const querys = this.getDocsBranch(this.api.querys);
+		if(!this.docs) {
+			const querys = this.getDocsBranch(this.api.querys);
 
-		let docs: JSX.Element[] = [];
+			let docs: JSX.Element[] = [];
 
-		for (const query of querys) {
-			//
-			docs = docs.concat([
-				<div className='docs' key={docs.length}>
-					<div>
-						<div className='docs-title'>
-							<div className='docs-query'><span className='docs-query-word'>Query:</span> {query.query}</div>
-						</div>
-						<div className='docs-description-title'>Description:</div>
-						<div className='docs-brief'>{query.brief}</div>
-						<div className='docs-example'>
-							<div className='docs-example-title'>Example:</div>
+			for (const query of querys) {
+				docs = docs.concat([
+					<div className='docs' key={docs.length}>
+						<div>
+							<div className='docs-title'>
+								<div className='docs-query'><span className='docs-query-word'>Query:</span> {query.query}</div>
+							</div>
+							<div className='docs-description-title'>Description:</div>
+							<div className='docs-brief'>{query.brief}</div>
+							<div className='docs-example'>
+								<div className='docs-example-title'>Example:</div>
 
-							<div className='docs-example-content'>
-								<div className='code-input-container'>
+								<div className='docs-example-content'>
+									<div className='code-input-container'>
 
-									<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
-									<Link className='code-button' to={"/query?query=" + encodeURIComponent(query.example)}>
-										<img className='search-icon' src={search_icon} />
-									</Link>
+										<textarea className='code-input' onChange={(e) => { e.preventDefault() }} value={query.example} />
+										<Link className='code-button' to={"/query?query=" + encodeURIComponent(query.example)}>
+											<img className='search-icon' src={search_icon} />
+										</Link>
+									</div>
+									<div>{this.compileElement(query.example, 0)}</div>
 								</div>
-								<div>{this.compileElement(query.example, 0)}</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			]);
+				]);
+			}
+
+			this.docs = docs;
+
+			return this.docs;
 		}
 
-		return <div>{docs}</div>
+		return this.docs;
 	}
 
 	public compileElement(src: string, key: number): JSX.Element {
@@ -946,6 +987,7 @@ export class MagicInterpreter {
 			const node = program.left;
 
 			const api = this.api;
+
 			const call = this.handleAPICall(api.querys, node);
 
 			return (
@@ -978,7 +1020,7 @@ export class MagicInterpreter {
 							<span style={{ backgroundColor: 'red', padding: '5px', color: 'white' }}>Error:</span> {err.message}
 						</div>
 						<div style={{ marginTop: '20px' }}>
-							Please, take a look at the docs tag for more information on how to form queries.
+				Please, take a look at the docs/ tab for more information on how to form queries.
 						</div>
 					</div>
 				</div>
